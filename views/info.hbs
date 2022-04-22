@@ -1,0 +1,140 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+
+<div class="containernar">
+    <ul class="narvar">
+      <li class = "home"><a class="active" href="/">Home</a></li>
+      <li class = "phongban"><a href="/phongban">Thông báo</a></li>
+        <li class = "info"><a href="/info/{{id}}" >Info</a></li>
+        {{#ifCond  role "==" 'admin'}}<li class = "admin"><a href="/admin" >admin</a></li>{{/ifCond }}
+    
+      <li class = "logout"><a href="/logout" >Logout</a></li>
+    </ul>
+  </div>
+
+<div class="container">
+<div class="row">
+		<div class="col-12">
+			<!-- Page title -->
+			<div class="my-5">
+				<h3>My Profile</h3>
+				<hr>
+
+			</div>
+                    <input type="hidden" id = "hiddenid" value="{{id}}">
+	
+			<input type="text" class="form-control" placeholder="" aria-label="First name" id = "thongbao" value="Scaralet" disabled>
+			<!-- Form START -->
+			<br>
+			<form class="file-upload" role="form" id="infoform" enctype="multipart/form-data">
+				<div class="row mb-5 gx-5">
+					<!-- Contact detail -->
+					<div class="col-xxl-8 mb-5 mb-xxl-0">
+						<div class="bg-secondary-soft px-4 py-5 rounded">
+							<div class="row g-3">
+								<h4 class="mb-4 mt-0">Contact detail</h4>
+								<!-- First Name -->
+								<div class="col-md-6">
+									<label class="form-label">First Name *</label>
+									<input type="text" class="form-control" placeholder="" aria-label="First name" id = "first_name"value="Scaralet">
+								</div>
+								<!-- Last name -->
+								{{#ifCond role "==" 'student'}}
+								<div class="col-md-6">
+									<label class="form-label">Lớp</label>
+										<input type="text" class="form-control" placeholder="" aria-label="lop" id="lop" value="">
+								</div>
+								<!-- Phone number -->
+								<div class="col-md-6">
+									<label class="form-label">Khoa</label>
+									<input type="text" class="form-control" placeholder="" aria-label="Khoa" id="khoa" value="">
+								</div>
+								{{/ifCond}}
+								<!-- Mobile number -->
+								<div class="col-md-6">
+									<label class="form-label">Phone number *</label>
+									<input type="text" class="form-control" placeholder="" aria-label="Phone number" id="phone_number" value="">
+								</div>
+								<!-- Email -->
+								
+								<!-- Skype -->
+								
+							</div> <!-- Row END -->
+						</div>
+					</div>
+					<!-- Upload profile -->
+					<div class="col-xxl-4">
+						<div class="bg-secondary-soft px-4 py-5 rounded">
+							<div class="row g-3">
+								<h4 class="mb-4 mt-0">Upload your profile photo</h4>
+								<div class="text-center">
+									<!-- Image upload -->
+									<div class="square position-relative display-2 mb-3">
+										<img src = "" class="image" id="image" src="#"  alt="your image" >
+									</div>
+									<!-- Button -->
+									<input type="file" id="customFile" name="file" hidden="" onchange="loadFile(event)">
+									<label class="btn btn-success-soft btn-block" for="customFile">Upload</label>
+									<button type="button" class="btn btn-danger-soft" >Remove</button>
+
+									<!-- Content -->
+									<p class="text-muted mt-3 mb-0"><span class="me-1">Note:</span>Minimum size 300px x 300px</p>
+								</div>  
+							</div>
+						</div>
+					</div>
+				</div> <!-- Row END -->
+
+				<!-- Social media detail -->
+				<div class="row mb-5 gx-5">
+					<div class="col-xxl-6 mb-5 mb-xxl-0">
+						<div class="bg-secondary-soft px-4 py-5 rounded">
+							<div class="row g-3">
+								<h4 class="mb-4 mt-0">Social media detail</h4>
+								<!-- Facebook -->
+								<div class="col-md-6">
+									<label class="form-label"><i class="fab fa-fw fa-facebook me-2 text-facebook"></i>Facebook *</label>
+									<input type="text" class="form-control" id="facebook" placeholder="" aria-label="Facebook"  value="http://www.facebook.com">
+								</div>
+								
+								
+
+
+
+							</div> <!-- Row END -->
+						</div>
+					</div>
+					<!-- change password -->	
+					{{#ifCond role "==" "phongban"}}
+					<div class="col-xxl-6">
+						<div class="bg-secondary-soft px-4 py-5 rounded">
+							<div class="row g-3">
+								<h4 class="my-4">Change Password</h4>
+								<!-- Old password -->
+								<div class="col-md-6">
+									<label for="exampleInputPassword1" class="form-label">Old password *</label>
+									<input type="password" class="form-control" id="oldpassword"onkeyup = 'check()'>
+								</div>
+								<!-- New password -->
+								<div class="col-md-6">
+									<label for="exampleInputPassword2" class="form-label">New password *</label>
+									<input type="password" class="form-control" id="newpassword"onkeyup = 'check()'>
+								</div>
+								<!-- Confirm password -->
+								<div class="col-md-12">
+									<label for="exampleInputPassword3" class="form-label">Confirm Password *</label>
+									<input type="password" class="form-control" id="renewpassword" onkeyup = 'check()'>
+								</div>
+								<p id= message></p>
+							</div>
+						</div>
+					</div>
+					{{/ifCond}}
+				</div> <!-- Row END -->
+				<!-- button -->
+				<div class="gap-3 d-md-flex justify-content-md-end text-center">
+					<button type="button" class="btn btn-primary btn-lg" id = "update">Update profile</button>
+				</div>
+			</form> <!-- Form END -->
+		</div>
+	</div>
+	</div>
