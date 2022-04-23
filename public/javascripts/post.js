@@ -297,7 +297,6 @@ $(document).ready(function() {
             }
             // Examine the text in the response
             response.json().then(function(datas) { 
-              console.log(data)
               document.getElementById('myModal').style.display = 'block';
               var name = document.querySelector("#txtTitle");
               name.innerHTML = datas.name
