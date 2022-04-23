@@ -42,13 +42,13 @@ $(document).ready(function() {
 
           var del = clone.querySelector(".btn-primarydelete");
           var cmt = clone.querySelector("#postBtn3");
-          console.log(data[i])
-          console.log(data[i].linkvideo)
           if(data[i].linkvideo){
             var videolocal = clone.querySelector(".videolocal");
             videolocal.src = data[i].linkvideo
             var youtube = clone.querySelector("#videoyoutube");
             youtube.style.display = 'none';
+           var span =  clone.querySelector('#content_post');
+           span.style.display = 'block';
          }else{
           clone.querySelector("#videolocal").style.display = 'none'
          }
@@ -56,6 +56,8 @@ $(document).ready(function() {
             var youtube = clone.querySelector("#videoyoutube");    
             youtube.src = data[i].linkyoutube
             clone.querySelector("#videolocal").style.display = 'none'
+            var span =  clone.querySelector('#content_post');
+           span.style.display = 'block';
           }else{
             var youtube = clone.querySelector("#videoyoutube");
             youtube.style.display = 'none';
@@ -231,6 +233,7 @@ $(document).ready(function() {
       }
       if(video.files[0]){
         formData.append('video',video.files[0]);
+        document.getElementById('content_post').style.display = "block";
       }
       if(document.getElementById('linkyoutube').value != "" && video.files[0]){
         alert ("You can't upload both video and link")
@@ -296,7 +299,7 @@ $(document).ready(function() {
             }
             // Examine the text in the response
             response.json().then(function(datas) { 
-
+              document.getElementById('myModal').style.display = 'block';
               var name = document.querySelector("#txtTitle");
               name.innerHTML = datas.name
               var content = document.querySelector("#txtBody");
@@ -417,24 +420,28 @@ $(document).ready(function() {
               
 
           })  
+
+
         function doSomething() {
           var modalImg = document.getElementById("img01");
         var modal = document.getElementById("myModals");
-        console.log(modal)
           modal.style.display = "block";
           modalImg.src = this.img.currentSrc; 
         }
         
 
 });
-function closeModal(){
+
+// When the user clicks on <span> (x), close the modal
+
+
+function closeModalimage(){
   var modal = document.getElementById("myModals");
   modal.style.display = "none";
 }
 
 
 
-// When the user clicks on <span> (x), close the modal
 
 
 var loadFile = function(event) {
@@ -510,7 +517,18 @@ function ImgUpload() {
 
 function addUpload(){
   document.getElementById('fileupload').style.display = 'block';
+  
 }
 function addUpload2(){
   document.getElementById('videoupload').style.display = 'block'; 
+}
+function closeModal(){
+  document.getElementById('myModal').style.display = 'none';
+} 
+  
+function closeimageModalpost(){
+    document.getElementById('fileupload').style.display = 'none';  
+}
+function closevideoModalpost(){
+    document.getElementById('videoupload').style.display = 'none';
 }

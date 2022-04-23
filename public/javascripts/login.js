@@ -1,4 +1,4 @@
-window.onload = function(){
+    
     var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
     document.getElementById("forgot").onclick  = function(e){
@@ -46,9 +46,13 @@ window.onload = function(){
         }
         });
     })
-    };
-    
-    document.getElementById("login").onclick = function(e) {
+    }      
+    $('#password').keypress(function(e) {
+        if (e.keyCode == $.ui.keyCode.ENTER) {
+            e.preventDefault();            
+        }
+    });
+   document.getElementById("login").onclick = function(e) {
         e.preventDefault();
         let data = {    
             email: document.getElementById('email').value,
@@ -71,47 +75,11 @@ window.onload = function(){
             // Examine the text in the response
             res.json().then(function(data) { 
             if (data.success == 'true') {
-            alert("Password Match: Welcome!")
-    
             } else 
             {
-            alert("Wrong Password and Email")
                 // add your code here
             }
             });
         })
         };
-
-
-
-}
-
-// var check = function() {   
-//     var email = document.getElementById('email').value
-//     var password = document.getElementById('password').value
-//     var repassword = document.getElementById('repassword').value
-//         if(!email){
-//             document.getElementById('message').style.color = 'red';
-//           document.getElementById('message').innerHTML = 'Email not null';
-//         }
-//         else if (!password) {
-//             document.getElementById('message').style.color = 'red';
-//           document.getElementById('message').innerHTML = 'Password not null';
-//         }
-//        else {
-//         document.getElementById('message').disabled  = true;
-//         document.getElementById('message').disabled  = true;
-//       }
-       
-   
-
-//       if (document.getElementById('password').value ==
-//       document.getElementById('repassword').value) {
-//       document.getElementById('message').style.color = 'green';
-//       document.getElementById('message').innerHTML = 'matching';
-//     } else {
-//       document.getElementById('message').style.color = 'red';
-//       document.getElementById('message').innerHTML = 'not matching';
-//     }
-      
-//       }
+    

@@ -35,19 +35,23 @@
         <div class="panel profile-info">
           <form class="form-horizontal" role = "form"  id = "formpost" enctype="multipart/form-data">
               <textarea id ="content" class="form-control input-lg p-text-area" rows="2" placeholder="Whats in your mind today?" name="content"></textarea>
-                            
-                            <div class="upload__box fileupload" id="fileupload" >
+                            {{!-- thêm ảnh  --}}
+                      <div class="upload__box fileupload" id="fileupload" >
                     <div class="upload__btn-box">
                         <div class="upload__img-wrap"></div>
                         <label class="upload__btn">
                         
                         <p>Upload images</p>
                         <input type="file" multiple="" data-max_length="10" class="upload__inputfile">
+
                         </label>
+
+
                     </div>
-                    
+                    <button type="button" class="btn btn-danger-soft" onclick="closeimageModalpost()" >Close</button>
+
                     </div>
-          
+          {{!-- thêm video --}}
             <div class="col-xxl-10 videoupload" id = 'videoupload' >
 						<div class="bg-secondary-soft px-4 py-5 rounded">
 							<div class="row g-3">
@@ -64,7 +68,7 @@
                                        <input type="file"  name="filevideo" class="file_multi_video" id="customvideo" accept="video/*">
 
 									<label class="btn btn-success-soft btn-block" for="customvideo">Upload</label>
-									<button type="button" class="btn btn-danger-soft" >Remove</button>
+									<button type="button" class="btn btn-danger-soft" onclick="closevideoModalpost()" >Close</button>
 
 									<!-- Content -->
 								</div>  
@@ -92,7 +96,7 @@
             </div>
             </div> --}}       
 
-                 <button type="button" id="upimg" class="btn btn-info pull-left" onclick = 'addUpload()'>Thêm ảnh</button>
+                 <button type="button" id="upimg" class="btn btn-info pull-left " onclick = 'addUpload()'>Thêm ảnh</button>
                  <button type="button" id="upvideo" class="btn btn-info pull-left" onclick = 'addUpload2()'>Thêm Video</button>
 
             <button type="submit" id="postBtn" class="btn btn-info pull-right">Post</button>
@@ -122,18 +126,20 @@
               </div>
               <div class="clearfix"></div>
               <p class="fb-user-status"> </p>
+                    <div class="imageContainer" >
+                            
+                        </div>
+                    <div id="myModals" class="modals">
+                        <span class="close" id = "close" onclick="closeModalimage()">&times;</span>
+                        <img class="modal-contents" id="img01">
+                        </div>
+                        <p id = "content_post">Video here:</p>
               <video  controls id= "videolocal">
             <source src="" id="video_here" class = "videolocal">
                 Your browser does not support HTML5 video.
             </video>
-            <iframe  src="https://www.youtube.com/embed/XGSy3_Czz8k"  id = 'videoyoutube'></iframe>
-                        <div class="imageContainer" >
-                            
-                        </div>
-                    <div id="myModals" class="modals">
-                        <span class="close" id = "close" onclick="closeModal()">&times;</span>
-                        <img class="modal-content" id="img01">
-                        </div>
+            <iframe  src=""  id = 'videoyoutube'></iframe>
+
               <div class="fb-status-container fb-border">
                   <div class="fb-time-action">
                       <a href="#" title="Like this">Like</a>
@@ -193,30 +199,33 @@
               </div>
           </div>  
         </template>
-          <div class="modal" id="myModal"> 
+          <div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog"> 
                 <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                 
-                    <!-- Modal Header -->
+                    <!-- Modal Header -->   
                     <div class="modal-header">
-                    <h4 class="modal-title" id="txtTitle">Modal Heading</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="txtTitle">Modal Heading</h4>    
+                    <button type="button" class="closemodal" id="closemodal"  data-dismiss="modal" onclick="closeModal()">&times;</button>
                     </div>
                     
                     <!-- Modal body -->
                     <div class="modal-body">
                         <form>
                         <textarea name= "content2" class="form-control input-lg p-text-area" id="txtBody" rows="2" >asds</textarea>
-                        
+                        <video width="400" controls id = 'videomodal'>
+                        <source src="" id="video_modal">
+                            Your browser does not support HTML5 video.
+                        </video>
+                            <input type="file"  name="filevideo" class="file_multi_video" id="videomodal" accept="video/*">
+                            <input type ='text' id = 'linkyoutube-modal' name = 'linkyoutube' Value = '' placeholder = 'Link Youtube'>
+
                     </form>
                     <footer class="panel-footer">
-                        <button type="button" class="btn btn-info pull-right"  id ="postBtn2">Post</button>
-                        <ul class="nav nav-pills">
-                            <li><a href="#"><i class="fa fa-map-marker"></i></a></li>
-                            <li><a href="#"><i class="fa fa-camera"></i></a></li>
-                            <li><a href="#"><i class=" fa fa-film"></i></a></li>
-                            <li><a href="#"><i class="fa fa-microphone"></i></a></li>
-                        </ul>
+                        <button type="button" class="btn btn-info pull-left" id="postBtn" for="videomodal" value ="">Thêm ảnh</button>
+                        <button type="button" class="btn btn-info pull-left" id="postBtn2" for="videomodal" value ="">Thêm video</button>
+                        <button type="button" class="btn btn-info pull-right"  id ="postBtn2">Save changes</button>
+                        
                     </footer>
                     </div>
                     <template id = 'imagepost'> 
@@ -225,7 +234,7 @@
                                             
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="closeModal()">Close</button>
                         </div>
                         
                     </div>
