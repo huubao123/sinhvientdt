@@ -103,6 +103,12 @@ body .containernar ul.narvar {
   display: inline;
   margin-top: 20px;
 }
+.img-modal_edit{
+  width: 100px;
+  height: 100px;
+  display: inline;
+  margin-top: 20px;
+}
 
 body {
   color: #797979;
@@ -392,7 +398,7 @@ a:hover{
   padding: 60px 0;
 }
 
-.fileupload {margin-top:20px;
+.fileupload,.fileuploadedit {margin-top:20px;
   color: #9b9ca1;
   display: none;
   text-align: center;
@@ -445,11 +451,11 @@ a:hover{
     display: none;
     text-align: center;
   }
-.fileupload {
+.fileupload,.fileuploadedit {
   box-sizing: border-box;
 }
 
-.fileupload p {
+.fileupload p,.fileuploadedit p {
   margin: 0;
 }
 
@@ -463,6 +469,12 @@ a:hover{
 }
 
   
+.videoupload_edit .text-center{
+    text-align: center;
+    margin: 0 auto;
+    display: inline-block
+}
+
 
 
 
@@ -539,7 +551,6 @@ a:hover{
   padding-bottom: 100%;
 }
 
-
 .modals {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -614,4 +625,15 @@ iframe#videoyoutube{
   width: 560px;
   height: 315px;
 
+}
+#videomodal{
+  display: none;
+  text-align: center;
+}
+#linkyoutube-modal{
+  display: none;
+  text-align: center;
+}
+button.close_video_edit,label.upload_edit{
+  display: none;
 }

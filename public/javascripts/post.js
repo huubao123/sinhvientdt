@@ -177,9 +177,7 @@ $(document).ready(function() {
         var youtube = clone.querySelector("#videoyoutube");
         youtube.style.display = 'none';
       }
-      console.log(linkvideo)
       if(linkvideo != undefined ){
-
         var videolocal = clone.querySelector(".videolocal");
         videolocal.src = linkvideo
         var youtube = clone.querySelector("#videoyoutube");
@@ -299,11 +297,44 @@ $(document).ready(function() {
             }
             // Examine the text in the response
             response.json().then(function(datas) { 
+              console.log(data)
               document.getElementById('myModal').style.display = 'block';
               var name = document.querySelector("#txtTitle");
               name.innerHTML = datas.name
               var content = document.querySelector("#txtBody");
               content.innerHTML = data[0].content
+              if(data[0].linkyoutube){
+              var linkyoutube = document.querySelector("#linkyoutube-modal");
+              linkyoutube.value = data[0].linkyoutube
+              }else{  
+                var linkyoutube = document.querySelector("#linkyoutube-modal");
+                linkyoutube.style.display = 'none';
+              }
+              if(data[0].linkvideo){
+                var linkvideo = document.querySelector("#video_modal");
+                linkvideo.src = data[0].linkvideo
+              }else{
+                var linkvideo = document.querySelector("#video_modal");
+                linkvideo.style.display = 'none';
+              }
+              if(data[0].img){
+                for (var i=0; i<data[0].img.length; i++){
+                  var imageid = document.querySelector(".imageContainers");
+                  var imgs = document.createElement("img");
+                  imgs.src = data[0].img[i]
+                  imgs.setAttribute('class','img-modal_edit'),
+                  imgs.setAttribute('onclick','doSomething();'),// for FF
+                  imgs.onclick = function() {doSomething();} // for IE
+                  imageid.appendChild(imgs)
+                }
+                
+              }else{
+                var imageid = document.querySelector(".imageContainer");
+                imageid.style.display = 'none';
+              }
+
+
+
               document.getElementById('postBtn2').value = id
             });
           })
@@ -453,8 +484,17 @@ $(document).on("change", ".file_multi_video", function(evt) {
   $source[0].src = URL.createObjectURL(this.files[0]);
   $source.parent()[0].load();
 });
+$(document).on("change", ".file_multi_video_edit", function(evt) {
+  document.getElementById('video_modal').src = URL.createObjectURL(this.files[0]);
+  console.log(URL.createObjectURL(this.files[0]))
+  var $source = $('#video_modal_edit');
+  console.log($source)
+  $source[0].src = URL.createObjectURL(this.files[0]);
+  $source.parent()[0].load();
+});
 jQuery(document).ready(function () {
   ImgUpload();
+  ImgUpload_edit(); 
   
 });
 
@@ -514,16 +554,92 @@ function ImgUpload() {
     $(this).parent().parent().remove();
   });
 }
+function ImgUpload_edit() {
+  var imgWrap = "";
+  var imgArray = [];
+
+  $('.upload__inputfile_edit').each(function () {
+    $(this).on('change', function (e) {
+      imgWrap = $(this).closest('.upload__box_edit').find('.upload__img-wrap_edit');
+      var maxLength = $(this).attr('data-max_length');
+
+      var files = e.target.files;
+      var filesArr = Array.prototype.slice.call(files);
+      var iterator = 0;
+      filesArr.forEach(function (f, index) {
+
+        if (!f.type.match('image.*')) {
+          return;
+        }
+
+        if (imgArray.length > maxLength) {
+          alert('You can only upload ' + maxLength + 1 + ' images');
+        } else {
+          var len = 0;
+          for (var i = 0; i < imgArray.length; i++) {
+            if (imgArray[i] !== undefined) {
+              len++;
+            }
+          }
+          if (len > maxLength) {
+            return false;
+          } else {
+            imgArray.push(f);
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'></div></div></div>";
+              imgWrap.append(html);
+              iterator++;
+            }
+            reader.readAsDataURL(f);
+          }
+        }
+      });
+    });
+  });
+
+  $('body').on('click', ".upload__img-close_edit", function (e) {
+    var file = $(this).parent().data("file");
+    for (var i = 0; i < imgArray.length; i++) {
+      if (imgArray[i].name === file) {
+        imgArray.splice(i, 1);
+        break;
+      }
+    }
+    $(this).parent().parent().remove();
+  });
+}
 
 function addUpload(){
   document.getElementById('fileupload').style.display = 'block';
   
+}
+function addUploadimageedit(){
+  document.getElementById('fileuploadedit').style.display = 'block';
+} 
+function addUploadvideoedit(){
+    document.getElementById('videoupload_edit').style.display = 'inline-block';
+
+  document.getElementById('upload_edit').style.display = 'inline-block';
+  document.getElementById('close_video_edit').style.display = 'inline-block';
+  if(document.getElementById('video_modal').style.display = 'none'){
+    document.getElementById('video_modal').style.display = 'inline-block';
+  }
+  if(document.getElementById("linkyoutube-modal").style.display = 'none'){  
+    document.getElementById("linkyoutube-modal").style.display = 'block';
+  }
+
 }
 function addUpload2(){
   document.getElementById('videoupload').style.display = 'block'; 
 }
 function closeModal(){
   document.getElementById('myModal').style.display = 'none';
+  $('.modal-backdrop').remove();
+
+  $('.img-modal_edit').remove();
+
 } 
   
 function closeimageModalpost(){
@@ -531,4 +647,15 @@ function closeimageModalpost(){
 }
 function closevideoModalpost(){
     document.getElementById('videoupload').style.display = 'none';
+}
+function closeimageModalpost_edit(){
+    document.getElementById('fileuploadedit').style.display = 'none';  
+}
+function closevideoModalpost_edit(){  
+    document.getElementById('videomodal').style.display = 'none';
+}
+function closevideoModalpost_edit(){
+  document.getElementById('videoupload_edit').style.display = 'none';
+  // document.getElementById('videomodal').style.display = 'none';
+  // document.getElementById('linkyoutube-modal').style.display = 'none';
 }

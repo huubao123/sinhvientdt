@@ -61,7 +61,7 @@
                                       <input type ='text' id = 'linkyoutube' name = 'linkyoutube' Value = '' placeholder = 'Link Youtube '>
 
 									<!-- Button -->
-                                     <video width="400" controls>
+                                     <video width="300" controls>
                                     <source src="" id="video_here">
                                         Your browser does not support HTML5 video.
                                     </video>
@@ -213,17 +213,52 @@
                     <div class="modal-body">
                         <form>
                         <textarea name= "content2" class="form-control input-lg p-text-area" id="txtBody" rows="2" >asds</textarea>
-                        <video width="400" controls id = 'videomodal'>
-                        <source src="" id="video_modal">
-                            Your browser does not support HTML5 video.
-                        </video>
-                            <input type="file"  name="filevideo" class="file_multi_video" id="videomodal" accept="video/*">
-                            <input type ='text' id = 'linkyoutube-modal' name = 'linkyoutube' Value = '' placeholder = 'Link Youtube'>
+                        {{!-- thêm ảnh --}}
+                        <div class="upload__box_edit fileuploadedit" id="fileuploadedit" >
+                    <div class="upload__btn-box">
+                        <div class="upload__img-wrap_edit"></div>
+                        <label class="upload__btn">                        
+                        <p>Upload images</p>
+                        <input type="file" multiple="" data-max_length="10" class="upload__inputfile upload__inputfile_edit">
+                        </label>
+                    </div>
+                    <button type="button" class="btn btn-danger-soft" onclick="closeimageModalpost_edit()" >Close</button>
 
+                    </div>
+                        {{!-- hiện ảnh --}}
+                        <div class="imageContainers" >
+                            
+                        </div >
+                            <div class="col-xxl-10 videoupload_edit" id = 'videoupload_edit' >
+						<div class="bg-secondary-soft px-4 py-5 rounded">
+							<div class="row g-3">
+								<h4 class="mb-4 mt-0">Your Post video</h4>
+								<div class="text-center">
+									<!-- Image upload -->
+                                      <input type ='text' id = 'linkyoutube-modal' name = 'linkyoutube' Value = '' placeholder = 'Link Youtube '>
+
+									<!-- Button -->
+                                      <video width="350" controls id = 'video_modal'>
+                                        <source src="" id="video_modal_edit">
+                                            Your browser does not support HTML5 video.
+                                        </video>
+                                       <input type="file"  name="filevideo" class="file_multi_video_edit" id="video_upload_edit" accept="video/*">
+
+									<label class="btn btn-success-soft btn-block upload_edit" id="upload_edit" for="video_upload_edit">Upload</label>
+									<button type="button" class="btn btn-danger-soft close_video_edit" id="close_video_edit" onclick="closevideoModalpost_edit()" >Close</button>
+
+									<!-- Content -->
+								</div>  
+							</div>
+						</div>
+					</div>
+                        {{!-- hiện video --}}
+                     
                     </form>
                     <footer class="panel-footer">
-                        <button type="button" class="btn btn-info pull-left" id="postBtn" for="videomodal" value ="">Thêm ảnh</button>
-                        <button type="button" class="btn btn-info pull-left" id="postBtn2" for="videomodal" value ="">Thêm video</button>
+                        <button type="button" class="btn btn-info pull-left"   value ="" onclick = 'addUploadimageedit()'>Thêm ảnh</button>
+                        <button type="button" class="btn btn-info pull-left"  value ="" onclick = 'addUploadvideoedit()'>Thêm video</button>
+
                         <button type="button" class="btn btn-info pull-right"  id ="postBtn2">Save changes</button>
                         
                     </footer>
