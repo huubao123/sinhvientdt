@@ -21,8 +21,6 @@ window.onload = function(){
           var clone = temp.content.cloneNode(true);
               var hrefphongban = clone.querySelector("#hover-primary");
               var name= clone.querySelector("#namephongban"); 
-              console.log(hrefphongban)
-              console.log(name)
               hrefphongban.href = "post/user/"+ data[i].id
 
               name.innerHTML = data[i].name
