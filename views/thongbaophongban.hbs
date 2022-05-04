@@ -1,5 +1,14 @@
-<br>
-<br>
+
+<div class="containernar">
+    <ul class="narvar">
+      <li class = "home"><a class="active" href="/">Home</a></li>
+      <li class = "phongban"><a href="/phongban">Thông báo</a></li>
+        <li class = "info"><a href="/info/{{id}}" >Info</a></li>
+        {{#ifCond  role "==" 'admin'}}<li class = "admin"><a href="/admin" >admin</a></li>{{/ifCond }}
+    
+      <li class = "logout"><a href="/logout" >Logout</a></li>
+    </ul>
+  </div>
 <h1>DANH SÁCH THÔNG BÁO PHÒNG BAN</h1>
 <br>
 <div class="container bootdey">
