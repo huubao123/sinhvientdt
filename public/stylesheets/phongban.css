@@ -214,3 +214,14 @@ h5 span {
 h5 a {
     color: #8b95a5;
 }
+body .containernar ul.narvar {
+    list-style-type: none;
+   margin: 0;
+   padding: 0;
+   overflow: hidden;
+   background-color: white;
+   position: fixed;
+   width: 100%;
+     top: 0;
+   
+ }
