@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-// const connectionString = "mongodb+srv://danglehuubao:Namlundethuong06032001@cluster0.uu2we.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-const connectionString = "mongodb://localhost:27017/social"
+const connectionString = "mongodb+srv://danglehuubao:Namlundethuong06032001@cluster0.uu2we.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+// const connectionString = "mongodb://localhost:27017/social"
 if(!connectionString) {
     console.error('MongoDB connection string missing!')
     process.exit(1)

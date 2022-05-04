@@ -755,7 +755,7 @@ function deletevideoModalpost_edit(){
     console.log(document.getElementById('video_modal').src)
     
    id_post = document.getElementById('delete_video_edit').value
-   const valueToRemove = "http://localhost:3000";
+   const valueToRemove = "https://sinhvientdt.herokuapp.com";
    src = document.getElementById('video_modal').src
    let data = {
      linkvideo : src.replace(valueToRemove,"")
