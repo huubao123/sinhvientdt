@@ -102,6 +102,7 @@ body .containernar ul.narvar {
   height: 300px;
   display: inline;
   margin-top: 20px;
+
 }
 .img-modal_edit{
   width: 100px;
@@ -462,17 +463,21 @@ a:hover{
 .text-center input[type=file] {
   display: none;
 }
+
 .videoupload  {
   text-align: center;
   margin: 0 auto; 
 
 }
-
+.videoupload_edit{
+  display: none;
+}
   
 .videoupload_edit .text-center{
     text-align: center;
     margin: 0 auto;
-    display: inline-block
+    display: inline;  
+    justify-content: center
 }
 
 
@@ -634,6 +639,22 @@ iframe#videoyoutube{
   display: none;
   text-align: center;
 }
-button.close_video_edit,label.upload_edit{
+button.close_video_edit,label.upload_edit,button.delete_video_edit,button.delete_video_post{
   display: none;
+}
+.alert{
+  display: none;
+  z-index: 9999;
+  position: fixed;
+  top: 10px;
+  width: 500px;
+  height: auto;
+  font-size: 15px;
+  animation-name: example;
+  animation-duration: 1s;  
+  animation-fill-mode: forwards;
+}
+@keyframes example {
+  from {right:  -500px;}
+  to {right: 20px;}
 }

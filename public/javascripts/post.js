@@ -45,6 +45,8 @@ $(document).ready(function() {
           if(data[i].linkvideo){
             var videolocal = clone.querySelector(".videolocal");
             videolocal.src = data[i].linkvideo
+            var videolocala = clone.querySelector("#videolocal");
+            videolocala.src = data[i].linkvideo
             var youtube = clone.querySelector("#videoyoutube");
             youtube.style.display = 'none';
            var span =  clone.querySelector('#content_post');
@@ -53,7 +55,7 @@ $(document).ready(function() {
           clone.querySelector("#videolocal").style.display = 'none'
          }
           if(data[i].linkyoutube){
-            var youtube = clone.querySelector("#videoyoutube");    
+            var youtube = clone.querySelector("#videoyoutube");                
             youtube.src = data[i].linkyoutube
             clone.querySelector("#videolocal").style.display = 'none'
             var span =  clone.querySelector('#content_post');
@@ -63,19 +65,17 @@ $(document).ready(function() {
             youtube.style.display = 'none';
           }
             
-          var image = clone.querySelector('.fb-user-image');         
+          var image = clone.querySelector('.fb-user-image');
           image.src = datas.picture
           var imageid =clone.querySelector('.imageContainer')
           
 
 
-
-          imageid.classList.add(data[i]._id)
             if (data[i].img.length > 0){
                 for (var j = 0; j < data[i].img.length;j++){                   
               imageid.appendChild(img = document.createElement("img"),
               img.src = data[i].img[j],
-              img.setAttribute('class','img-responsive'),
+              img.setAttribute('class','img-responsive '+data[i]._id),
               img.setAttribute('onclick','doSomething();'),// for FF
               img.onclick = function() {doSomething();} // for IE
                  )              
@@ -87,7 +87,6 @@ $(document).ready(function() {
             var drop = clone.querySelector('.dropdown')
            // console.log(hiddenid,data[i].user_id)
             if(hiddenid != data[i].user_id) {
-              
               drop.style.display ='none';
             }
             
@@ -151,24 +150,12 @@ $(document).ready(function() {
         }
 
 
-  function insertpost(username, message, id,linkyoutube,linkvideo,img){
+  function insertpost(username, message, id,linkyoutube,linkvideo,img,postid){
     var temp = document.querySelector("#post");
     var clone = temp.content.cloneNode(true);
     var imageid =clone.querySelector('.imageContainer')
 
-//     var object = {};
-// formData.forEach((value, key) => {
-//     // Reflect.has in favor of: object.hasOwnProperty(key)
-//     if(!Reflect.has(object, key)){
-//         object[key] = value;
-//         return;
-//     }
-//     if(!Array.isArray(object[key])){
-//         object[key] = [object[key]];    
-//     }
-//     object[key].push(value);
-// });
-//       console.log(object);
+
       if (linkyoutube.length >0){
         var youtube = clone.querySelector("#videoyoutube");    
         youtube.src = linkyoutube
@@ -189,7 +176,8 @@ $(document).ready(function() {
       for (var j = 0; j < img.length;j++){                   
     imageid.appendChild(imgs = document.createElement("img"),
     imgs.src = img[j],
-    imgs.setAttribute('class','img-responsive'),
+    imgs.setAttribute('class','img-responsive '+ postid),
+    
     imgs.setAttribute('onclick','doSomething();'),// for FF
     imgs.onclick = function() {doSomething();} // for IE
 
@@ -265,8 +253,8 @@ $(document).ready(function() {
           if (data.success == 'true') {
             let username = document.getElementById('username').innerHTML;
             let message = document.getElementById('content').value;
-            let id= document.getElementById('hiddenid').value
-            insertpost(username, message, id,data.linkyoutube,data.linkvideo,data.img)
+            let user_id= document.getElementById('hiddenid').value
+            insertpost(username, message, user_id,data.linkyoutube,data.linkvideo,data.img,data.postid)
             
             document.getElementById('content').value = ''
             if(data.role == "phongban"){
@@ -303,13 +291,16 @@ $(document).ready(function() {
               var content = document.querySelector("#txtBody");
               content.innerHTML = data[0].content
               if(data[0].linkyoutube){
+                document.getElementById('linkyoutube-modal').style.display = 'block';
               var linkyoutube = document.querySelector("#linkyoutube-modal");
               linkyoutube.value = data[0].linkyoutube
               }else{  
+                document.getElementById('videoupload_edit').style.display = 'block';
                 var linkyoutube = document.querySelector("#linkyoutube-modal");
                 linkyoutube.style.display = 'none';
               }
               if(data[0].linkvideo){
+                document.getElementById('videoupload_edit').style.display = 'block';
                 var linkvideo = document.querySelector("#video_modal");
                 linkvideo.src = data[0].linkvideo
               }else{
@@ -331,10 +322,8 @@ $(document).ready(function() {
                 var imageid = document.querySelector(".imageContainer");
                 imageid.style.display = 'none';
               }
-
-
-
               document.getElementById('postBtn2').value = id
+              document.getElementById('delete_video_edit').value = id
             });
           })
 
@@ -345,19 +334,47 @@ $(document).ready(function() {
         })
     
 
-        document.getElementById("postBtn2").onclick = function(e) {
+        
+        })
+          document.getElementById("postBtn2").onclick = function(e) {
           e.preventDefault();
-          let id = $(this).attr('value');
-          console.log(id);
-          let data = {
-            content: document.getElementById('txtBody').value, 
+          let   id = $(this).attr('value');
+          const formData = new FormData();
+          const fileInput = document.querySelector('.upload__inputfile_edit')
+          const video = document.querySelector('.file_multi_video_edit')
+         
+          if(document.getElementById('linkyoutube-modal').value ){
+            if(document.querySelector("#video_modal").src || document.querySelector("#video_modal_edit").length > 0){
+            alert("You can't upload both video and link")
+            document.getElementById('video_upload_edit').value = ""
+            document.getElementById('video_modal').src = ""
+            return;
+            }
+            
           }
+          if (document.getElementById('linkyoutube-modal').value){
+            formData.append('linkyoutube', document.getElementById('linkyoutube-modal').value)
+          }else{
+            formData.append('linkyoutube', "")
+          }
+          if(video.files[0]){
+            formData.append('video',video.files[0]);
+          }
+          
+          if( fileInput.files.length != 0){
+              for (var i = 0; i < fileInput.files.length; i++){
+                      formData.append('file', fileInput.files[i]);
+                    
+          }
+        }
+          formData.append('content', document.getElementById('txtBody').value);
+         
           fetch('/post/updatepost/'+ id, {
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data) // body data type must match "Content-Type" header
+              // headers: {
+              //   'Content-Type': 'application/json'
+              // },
+              body: formData// body data type must match "Content-Type" header
             })
           .then(response => {
             if (response.status !== 200) {
@@ -365,21 +382,85 @@ $(document).ready(function() {
               return;
             }
             // Examine the text in the response
-            response.json().then(function(data) { 
+            response.json().then(async function(data) { 
+
               if (data.success == 'true') {
-                document.getElementsByClassName('fb-user-status '+ id).innerHTML = document.getElementById('txtBody').value
-                alert('Cập nhật thành công')
-                
+                document.getElementsByClassName('fb-user-status '+ id)[0].innerHTML = document.getElementById('txtBody').value
+                await fetch('/post/'+id)
+                .then(response => {
+                  if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    return;
+                  }
+                  response.json().then(async post  => {
+                  post_edit = document.getElementsByClassName(' panel-body '+id)[0] 
+                  console.log(post_edit.childNodes)
+                  for (var i = 0; i < post_edit.childNodes.length; i++) {
+                    if (post_edit.childNodes[i].id == 'videoyoutube'){
+                      if(post[0].linkyoutube.length > 1){
+                        if(post_edit.childNodes[i].style.display == 'none'){
+                          post_edit.childNodes[i].style.display = 'block' 
+                        post_edit.childNodes[i].src = post[0].linkyoutube
+                        }else{
+                          post_edit.childNodes[i].src = post[0].linkyoutube
+                          
+                        }
+                    }
+                  }
+                    if (post_edit.childNodes[i].id == 'videolocal' ){
+                      if(post_edit.childNodes[i].style.display == 'none'){
+                      
+                        post_edit.childNodes[i].style.display = 'block'
+                        post_edit.childNodes[i].src = post[0].linkvideo
+                      }
+                      else{
+                        post_edit.childNodes[i].src = post[0].linkvideo
+
+                      }
+                    }
+                  
+                    if (post_edit.childNodes[i].className == 'imageContainer'){
+                      await $( ".img-responsive."+id ).remove();
+
+                      for (var j = 0; j < post[0].img.length; j++) {
+                        var imgs = document.createElement("img");
+                        imgs.src = post[0].img[j]
+                        imgs.setAttribute('class','img-responsive '+id),
+                        imgs.setAttribute('onclick','doSomething();'),// for FF
+                        imgs.onclick = function() {doSomething();} // for IE
+                        post_edit.childNodes[i].appendChild(imgs)
+                      }
+                    }
+                  }
+                  
+                  
+
+                  })             
+
+                })
+                function do_totalsN(){
+                  var ele = document.getElementsByClassName('alert-success')[0];
+                  ele.style.display = 'block';
+                  setTimeout(function(){
+                      ele.style.display = 'none';
+                  }, 5000);
+              }
+              do_totalsN();
                 //socket.emit('post message', {username: username, message: message});
               } else {
-                alert('Cập nhật thất bại')
+                function do_totalsN(){
+                  var ele = document.getElementsByClassName('alert-danger')[0];
+                  ele.style.display = 'block';
+                  setTimeout(function(){
+                      ele.style.display = 'none';
+                  }, 5000);
+              }
+              do_totalsN(); 
                 // add your code here
               }
             });
           })
         };
-        })
-
             $('body').on('click', '.btn-primarydelete', function() {
               let id = $(this).attr('value');
               if(confirm('Are you sure you want to delete')){
@@ -482,14 +563,16 @@ $(document).on("change", ".file_multi_video", function(evt) {
   var $source = $('#video_here');
   $source[0].src = URL.createObjectURL(this.files[0]);
   $source.parent()[0].load();
+  document.getElementsByClassName('delete_video_post')[0].style.display = 'inline-block';
+
 });
 $(document).on("change", ".file_multi_video_edit", function(evt) {
   document.getElementById('video_modal').src = URL.createObjectURL(this.files[0]);
-  console.log(URL.createObjectURL(this.files[0]))
   var $source = $('#video_modal_edit');
-  console.log($source)
   $source[0].src = URL.createObjectURL(this.files[0]);
   $source.parent()[0].load();
+  document.getElementsByClassName('delete_video_edit')[0].style.display = 'inline-block';
+
 });
 jQuery(document).ready(function () {
   ImgUpload();
@@ -595,6 +678,7 @@ function ImgUpload_edit() {
           }
         }
       });
+
     });
   });
 
@@ -619,6 +703,9 @@ function addUploadimageedit(){
 } 
 function addUploadvideoedit(){
     document.getElementById('videoupload_edit').style.display = 'inline-block';
+    if(document.getElementById('video_modal')){
+      document.getElementById('delete_video_edit').style.display = 'inline-block';
+    }
 
   document.getElementById('upload_edit').style.display = 'inline-block';
   document.getElementById('close_video_edit').style.display = 'inline-block';
@@ -632,6 +719,7 @@ function addUploadvideoedit(){
 }
 function addUpload2(){
   document.getElementById('videoupload').style.display = 'block'; 
+
 }
 function closeModal(){
   document.getElementById('myModal').style.display = 'none';
@@ -657,4 +745,60 @@ function closevideoModalpost_edit(){
   document.getElementById('videoupload_edit').style.display = 'none';
   // document.getElementById('videomodal').style.display = 'none';
   // document.getElementById('linkyoutube-modal').style.display = 'none';
+}
+function deletevideopost(){
+  document.getElementById('customvideo').value= ''
+  document.getElementById('video_here').src = '';
+}
+function deletevideoModalpost_edit(){
+  if(document.getElementById('video_modal').src.includes('/videos/')){
+    console.log(document.getElementById('video_modal').src)
+    
+   id_post = document.getElementById('delete_video_edit').value
+   const valueToRemove = "http://localhost:3000";
+   src = document.getElementById('video_modal').src
+   let data = {
+     linkvideo : src.replace(valueToRemove,"")
+   } 
+    fetch('/post/deletevideo/'+id_post, {      
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', 
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' + response.status);
+        return;
+      }
+      // Examine the text in the response
+      response.json().then(function(data) { 
+
+        if (data.success == 'true') {
+          document.getElementById('video_upload_edit').value= ''
+          document.getElementById('video_modal').src = '';
+          //socket.emit('post message', {username: username, message: message});
+        } else {
+          function do_totalsN(){
+            var ele = document.getElementsByClassName('alert-danger')[0];
+            ele.style.display = 'block';
+            setTimeout(function(){
+                ele.style.display = 'none';
+            }, 5000);
+        }
+        do_totalsN();
+          // add your code here
+        }
+      });
+    })
+        
+
+  }else{
+      document.getElementById('video_upload_edit').value= ''
+  document.getElementById('video_modal').src = '';
+  }
+      
+
+
 }

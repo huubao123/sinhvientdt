@@ -126,6 +126,9 @@ ul.ks-cboxtags li input[type="checkbox"]:focus + label {
   margin-top: 100px;
   border-radius: 10%;
 }
+.container .box#formadmin {
+  width: 1000px
+}
 p.text-muted {
   color: white;
 }
@@ -232,3 +235,29 @@ a.btn:hover {
   transition: all 0.3s ease 0s;
   
 }
+.alert{
+  display: none;
+  z-index: 9999;
+  position: fixed;
+  top: 10px;
+  width: 500px;  
+  color: #3c763d;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  height: auto;
+  font-size: 15px;
+  animation-name: example;
+  animation-duration: 1s;  
+  animation-fill-mode: forwards;
+}
+@keyframes example {
+  from {right:  -500px;}
+  to {right: 20px;}
+}
+a#hover-primary:hover{
+    color: red;
+    text-decoration: none;
+}
+

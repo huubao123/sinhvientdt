@@ -46,15 +46,19 @@ function isLoggedIn(req, res, next) {
       return next();
   res.redirect('/login');
 }
-
-app.use('/', indexRouter);
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.role == 'admin') 
+      return next();
+  res.redirect('/login');      
+}
+app.use('/',indexRouter);
 app.use('/post',isLoggedIn,postRouter);
 app.use('/user',isLoggedIn, usersRouter); 
 app.use('/auth', authRouter);
-app.use('/admin', adminRouter);
+app.use('/admin', isAdmin,adminRouter);
 
 app.get('/public',isLoggedIn, express.static('public'));
-// app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -69,7 +73,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error',{layout: 'error'});
 });
 
 module.exports = app;

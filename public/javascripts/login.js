@@ -1,6 +1,4 @@
     
-    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-
     document.getElementById("forgot").onclick  = function(e){
         e.preventDefault();
     document.getElementById("repassword").style.display = "block";
@@ -26,6 +24,7 @@
             'Content-Type': 'application/json',
             'CSRF-Token': token
         },
+        credentials: 'same-origin',
         body: JSON.stringify(data) // body data type must match "Content-Type" header
         })
     .then(res => {
@@ -63,8 +62,8 @@
             headers: {
                 'Content-Type': 'application/json',
                 'CSRF-Token': token
-
-            },
+            },  
+            credentials: 'same-origin',
             body: JSON.stringify(data) // body data type must match "Content-Type" header
             })
         .then(res => {

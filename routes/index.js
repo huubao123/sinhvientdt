@@ -11,7 +11,6 @@ require('../controllers/api/local')(passport)
 var phongban = require('../controllers/phongban')
 var phongbanapi = require('../controllers/api/phongban')
 var info = require('../controllers/info')
-var admin = require('../controllers/admin')
 var csrf = require('csurf')
 var csrfProtection = csrf({ cookie: true })
 /* GET home page. */
@@ -23,9 +22,9 @@ function isLoggedIn(req, res, next) {
 router.get('/',isLoggedIn, function(req, res, next) {
   res.render('main', {layout: 'layout',title: 'Social',username:req.user.name, picture: req.user.picture,id:req.user._id,role:req.user.role});
 });
-router.get('/login',csrfProtection, login.login);
+router.get('/login', login.login);
 
-router.post('/login',csrfProtection, passport.authenticate('local', {
+router.post('/login', passport.authenticate('local', { 
   successRedirect: '/',
   failureRedirect: '/login',
   passReqToCallback : true,

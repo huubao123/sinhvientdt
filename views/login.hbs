@@ -5,7 +5,6 @@
                 <form onSubmit = "return checkPassword(this)" class="box" role="form" id = "form" action = "/login" method = "POST">
                     <h1>Login</h1>	
                     <p class="text-muted"> Please enter your login and password!</p> 
-					<input type="hidden" name = "_csrf" value= "{{csrfToken}}">
 
 					<input type="email" name="email" placeholder="Email" id = 'email' > 
 					<input type="password" name="password" placeholder="Password" id = "password" onkeyup='check();'> 

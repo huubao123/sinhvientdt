@@ -45,11 +45,25 @@ window.onload = function(){
             res.json().then(function(data) { 
                 console.log(data)
             if (data.success == 'true') {
-            alert("Create user successfully")
+                function do_totalsN(){
+                    var ele = document.getElementsByClassName('alert-success')[0];
+                    ele.style.display = 'block';
+                    setTimeout(function(){
+                        ele.style.display = 'none';
+                    }, 5000);
+                }
+                do_totalsN();
     
             } else 
             {
-            alert("Create user failed")
+                function do_totalsN(){
+                    var ele = document.getElementsByClassName('alert-danger')[0];
+                    ele.style.display = 'block';
+                    setTimeout(function(){
+                        ele.style.display = 'none';
+                    }, 5000);
+                }
+                do_totalsN();
                 // add your code here
             }
             });

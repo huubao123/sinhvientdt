@@ -1,18 +1,51 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-                <form onSubmit = "return checkPassword(this)" class="box" role="form" id = "form" action = "/login" method = "POST">
-					<h1>Danh sách Thông báo phòng ban</h1>
-                    <div id  = "phongban">
-                        <template>
-                    <a class="forgot text-muted" href="/doimk">{Forgot password?}</a>
-                    </br>
-                        </template>
-                    </div>
-
-
-                </form>
+<br>
+<br>
+<br>
+<div class="container bootdey">
+<div class="row">
+<div class="col-md-11 ">
+<div class="row" id = 'list'>
+    <template id = 'phongban'>
+  <div class="col-md-6 col-lg-4">
+    <div class="card hover-shadow">
+      <div class="flexbox align-items-center px-20 pt-20">
+        <div class="dropdown">
+          <a data-toggle="dropdown" href="#" aria-expanded="false"><i class="ti-more-alt rotate-90 text-muted"></i></a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+            <a class="dropdown-item" href="#"><i class="fa fa-fw fa-comments"></i> Messages</a>
+            <a class="dropdown-item" href="#"><i class="fa fa-fw fa-phone"></i> Call</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><i class="fa fa-fw fa-download"></i> Download Resume</a>
+          </div>
         </div>
-    </div>
-</div>
+      </div>
 
+      <div class="card-body text-center pt-1 pb-20">
+        <a href="#" id="imghref" >
+          <img class="avatar avatar-xxl" id = 'avartar' src="https://bootdey.com/img/Content/avatar/avatar2.png">
+        </a>
+        <a class="hover-primary" id = 'hover-primary'href="#" >
+        <h5 class="mt-2 mb-0" id= 'namephongban'>Maryam Amiri
+        </h5>
+         </a>
+      </div>
+
+      <footer class="card-footer flexbox">
+        <div>
+          <i class="fa fa-map-marker pr-1"></i>
+          <span></span>
+        </div>
+        <div>
+          <i class="fa fa-money pr-1"></i>
+          <span></span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+</template>
+  </div>
+  </div>
+</div>
+</div>

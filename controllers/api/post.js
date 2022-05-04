@@ -1,6 +1,6 @@
 var Post = require('../../models/post')
 const fs = require('fs');
-
+var slugify = require('slugify');
 var multiparty = require('multiparty');
 const path = require('path');
 const { join } = require('path');
@@ -32,12 +32,140 @@ class Posts {
        res.json(post)
      }
      async updatepost(req, res){
-       await Post.findByIdAndUpdate({_id: req.params.id},
-        {
-          content: req.body.content
-        })
-        res.json({success: 'true'})
+      const form = new multiparty.Form()
+      await form.parse(req,async function(err, fields, files) {
+        if (err) {  console.log(err) }
+        
+         await Post.findByIdAndUpdate({_id: req.params.id},{
+          content: fields.content[0],
+          linkyoutube: fields.linkyoutube[0], 
+            updated_at: new Date(),
+        }).clone().catch(function(err){ console.log(err)})
+        
+        const paths = []
+        if(Object.keys(files).length != 0){
+          if (files.file){
+            files.file.forEach(async function(file){
+            const url = './public/images'
+            if(!fs.existsSync(url)) {
+              fs.mkdirSync(url)
+            } 
+            
+            const dir = url + '/' + req.params.id
+            var path = '/images' + '/'+req.params.id+'/' + slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
+            const pathreal = dir +'/'+ slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
+            if(!fs.existsSync(dir)) {
+              fs.mkdirSync(dir)
+            }
+            fs.renameSync(file.path, pathreal)
+            paths.push(path)           
+          })   
+          
+          }
+          await Post.findById(req.params.id,async function(err, image) {
+              if (err) {
+                  console.log(err)
+              }else{
+                  if(image.img){
+                    image.img.forEach(async function(images){
+                    fs.unlinkSync('./public'+images)
+                    })
+                    await Post.updateOne(
+                        {_id: req.params.id },
+                        { $unset:
+                          {
+                            img:''
+                            
+                          }                  
+                         },
+                        {upsert: false},
+                      )
+                      await Post.updateOne(
+                        {_id: req.params.id },
+                        { $push:
+                          {
+                            img: {
+                              $each: paths
+                            }
+                          }                  
+                        },
+                        {upsert: true},
+                      )
+                  }else{
+                    console.log(paths)
+                    await Post.updateOne(
+                          {_id: req.params.id },
+                          { $push:
+                            {
+                              img: {
+                                
+                                $each: paths
+                              }
+                            }                  
+                          },
+                          {upsert: true},
+                        )
+                  }
+              }
+          }).clone().catch(function(err){ console.log(err)})
+
+            
+        
+
+
+
+          if(files.video.length > 0){
+            files.video.forEach(async function(file){
+            const url = './public/videos'
+            if(!fs.existsSync(url)) {
+              fs.mkdirSync(url)
+            } 
+            
+            const dir = url + '/' + req.params.id
+            var path = '/videos' + '/'+req.params.id+'/' + slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
+            const pathreal = dir +'/'+ slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
+            if(!fs.existsSync(dir)) {
+              fs.mkdirSync(dir)
+            }
+            fs.renameSync(file.path, pathreal)
+             await Post.findById(req.params.id,async function(err, video) {
+              if (err) {
+                  console.log(err)  
+                }else{
+                  if(video.linkvideo){
+                   fs.unlinkSync('./public'+video.linkvideo)
+                   await Post.updateOne(
+                          {_id: req.params.id},
+                            {
+                            linkvideo: path
+                            }
+                        )
+                     }
+                     else{
+                      await Post.updateOne(
+                        {_id: req.params.id},
+                          {
+                          linkvideo: path
+                          }
+                      )
+                     }
+                  }
+                  }).clone().catch(function(err){ console.log(err)})
+         
+          })   
+          }
+          
+          
+          
+      } 
+       
+            res.json({success: 'true'})
+
+    })
+  
      } 
+
+    //  xóa post
      async deletepost(req, res){
       await Post.findByIdAndDelete({_id: req.params.id})
       res.json({success: 'true'})
@@ -54,7 +182,6 @@ class Posts {
             updated_at: new Date(),
           })
           await post.save()
-          console.log(post._id)
           const paths = []
           if(Object.keys(files).length != 0){
             if (files.file != undefined){
@@ -65,8 +192,8 @@ class Posts {
               } 
               
               const dir = url + '/' + post._id
-              var path = '/images' + '/'+post._id+'/' + file.originalFilename
-              const pathreal = dir +'/'+ file.originalFilename
+              var path = '/images' + '/'+post._id+'/' + slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
+              const pathreal = dir +'/'+ slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
               if(!fs.existsSync(dir)) {
                 fs.mkdirSync(dir)
               }
@@ -83,8 +210,8 @@ class Posts {
               } 
               
               const dir = url + '/' + post._id
-              var path = '/videos' + '/'+post._id+'/' + file.originalFilename
-              const pathreal = dir +'/'+ file.originalFilename
+              var path = '/videos' + '/'+post._id+'/' + slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
+              const pathreal = dir +'/'+ slugify(file.originalFilename, {replacement: '_',lower: true,locale: 'vi'})
               if(!fs.existsSync(dir)) {
                 fs.mkdirSync(dir)
               }
@@ -116,7 +243,6 @@ class Posts {
             
         } 
         let post1 = await Post.find({_id: post._id})
-        console.log(post1[0].linkvideo)
         if (post1[0].linkvideo){          
         var  linkvideo = post1[0].linkvideo
         }
@@ -126,16 +252,31 @@ class Posts {
          var linkyoutube = ''
         }
         var img= []
-        console.log(post1[0].img)
         if (post1[0].img){
           img = post1[0].img 
         }else{
           img = ''
         }
-              res.json({success: 'true', postid: post._id, linkyoutube: linkyoutube ,  img: img, linkvideo: linkvideo})
+              res.json({success: 'true', postid: post._id, linkyoutube: linkyoutube ,  img: img, linkvideo: linkvideo, postid: post1[0]._id})
 
       })
 
+      }
+      async deletevideo(req, res){
+        console.log(req.body.linkvideo)
+        fs.unlinkSync('./public'+req.body.linkvideo)
+        await Post.updateOne(
+          {'_id': req.params.id },
+            {
+              $unset: {
+                linkvideo: ''
+              }
+            }
+            
+        
+        
+        )
+        res.json({success: 'true'})
       }
 }
 
