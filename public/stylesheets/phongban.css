@@ -2,6 +2,9 @@
 body{
     background:#FCFCFC;    
 }
+h1{
+    text-align:center;
+}
 .pr-12 {
     padding-right: 12px !important;
 }
