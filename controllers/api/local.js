@@ -18,8 +18,6 @@ let initPassportLocal = () => {
       if (!user) {
         return done(null, false);
       }
-      console.log(user.password)
-      console.log(password)
       if(user.email == "admin@tdtu.edu.vn"){
         if(user.password == password){
           return done(null, user);

@@ -1,6 +1,4 @@
-
-$(document).ready(function() {
-  
+$(document).ready(function() {  
   var socket = io();
   socket.on('post phongban', function(data) {
   alert(data.name+' có tin mới')    
@@ -8,8 +6,21 @@ $(document).ready(function() {
 
   var page =1;
   const limit = 5;
+   function display_success(){
+    var ele = document.getElementsByClassName('alert-success')[0];
+    ele.style.display = 'block';
+    setTimeout(function(){
+        ele.style.display = 'none';
+    }, 5000);
+  }
 
-  
+  function display_danger(){
+    var ele = document.getElementsByClassName('alert-danger')[0];
+    ele.style.display = 'block';
+    setTimeout(function(){
+        ele.style.display = 'none';
+    }, 5000);
+  }
   var hiddenid = document.getElementById('hiddenid').value;
   function LoadData() {
     fetch('/post/getpost/page/'+page+'/limit/'+limit) 
@@ -19,10 +30,7 @@ $(document).ready(function() {
         return;
       }
       response.json().then(data => {
-        // console.log(data[0].comment[0].user_id)
-      //console.log(data[0].comment.length);
          for ( let i = 0; i<data.length;i++){
-
         fetch('/user/'+data[i].user_id)
         .then(response => {
           if (response.status !== 200) {
@@ -84,7 +92,7 @@ $(document).ready(function() {
             }
           
           
-            var drop = clone.querySelector('.dropdown')
+            var drop = clone.querySelector('.dropdown-post')
            // console.log(hiddenid,data[i].user_id)
             if(hiddenid != data[i].user_id) {
               drop.style.display ='none';
@@ -98,31 +106,42 @@ $(document).ready(function() {
         var cmt_id = clone.querySelector(".fb-comments")
             cmt_id.classList.add(data[i]._id)
             cmt_id.setAttribute("id", data[i]._id)
-        
-        // if(data[i].comment.length){
-        //   for (let j = 0; j < data[i].comment.length; j++){
-        //       fetch('/user/'+ data[i].comment[j].user_id)  
-        //     .then(response => {
-        //       if (response.status !== 200) {
-        //         console.log('Looks like there was a problem. Status Code: ' + response.status);
-        //         return;
-        //       }response.json().then(usercmt => {
-        //         var comment = data[i].comment[j].content
-        //         var username = usercmt.name
-        //         var id  = usercmt._id
-        //         // var name = clone.querySelector(".usercmt");
-        //         // name.innerHTML= username
-        //         // name.href = "user/" +id
-        //         // var content = clone.querySelector(".cmtcontent");
-        //         // content.innerHTML = comment
-        //         insertcmt(username,comment,id,data[i]._id)
-        //       })
+        var cmt_more  = clone.querySelector(".fb-status-container.fb-border.fb-gray-bg")
+            cmt_more.classList.add(data[i]._id)
+        var discmt = clone.querySelector(".comment")  
+          discmt.classList.add(data[i]._id)
+          discmt.value= data[i]._id
+        var dislike = clone.querySelector(".like")  
+        dislike.classList.add(data[i]._id)
+        dislike.value= data[i]._id
+        var disshare = clone.querySelector(".share")  
+        disshare.classList.add(data[i]._id)
+        disshare.value= data[i]._id
+        if(data[i].comment.length){
+          for (let j = 0; j < data[i].comment.length; j++){
+              fetch('/user/'+ data[i].comment[j].user_id)  
+            .then(response => {
+              if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' + response.status);
+                return;
+              }response.json().then(usercmt => {
+                var comment = data[i].comment[j].content
+                var username = usercmt.name
+                var user_id  = usercmt._id
+                var cmt_id =data[i].comment[j]._id
+                // var name = clone.querySelector(".usercmt");
+                // name.innerHTML= username
+                // name.href = "user/" +id
+                // var content = clone.querySelector(".cmtcontent");
+                // content.innerHTML = comment
+                insertcmt(username,comment,user_id,data[i]._id,cmt_id)
+                
+              })
 
-        //       })
-        //      j++
+              })
 
-        //     }
-        // }
+            }
+        }
         cmt.value = data[i]._id
         var content = clone.querySelector("#contentcmt")
          content.classList.add(data[i]._id)
@@ -193,17 +212,37 @@ $(document).ready(function() {
     document.getElementById('status').prepend(clone); 
 
   }
-  function insertcmt(username, message, id,_id){
+  function insertcmt(username, message, user_id,_id,cmt_id){
     var template = document.querySelector('#cmt');
     var clone = template.content.cloneNode(true);
     
     var name = clone.querySelector(".usercmt");
     name.innerHTML= username
-    name.href = "user/" +id
+    name.href = "user/" +user_id
     var content = clone.querySelector(".cmtcontent"); 
     content.innerHTML = message
-    document.getElementById(_id).prepend(clone); 
+    var drop_cmt = clone.querySelector('.dropdown-cmt')
+    if(hiddenid != user_id) {
+      drop_cmt.style.display ='none';
+    }else{
+      drop_cmt.style.display ='block';
+      cmt_edit = clone.querySelector(".btn-primary-cmt")
+      cmt_edit.setAttribute("id_post", _id)
+      cmt_edit.setAttribute("id_cmt", cmt_id)
+      cmt_del = clone.querySelector(".btn-primarydelete-cmt")
+      cmt_del.setAttribute("id_post", _id)
+      cmt_del.setAttribute("id_cmt", cmt_id)
+      cmt_text = clone.querySelector(".cmtcontent")
+      cmt_text.classList.add(cmt_id)
+      cmt_input = clone.querySelector(".cmtcontent_input")
+      cmt_input.classList.add(cmt_id)
+      cmt_detail = clone.querySelector(".cmt-details")
+      cmt_detail.classList.add(cmt_id)
 
+    }
+
+    document.getElementById(_id).prepend(clone); 
+    
   }
   
   
@@ -326,15 +365,9 @@ $(document).ready(function() {
               document.getElementById('delete_video_edit').value = id
             });
           })
-
-          //console.log(data[0].comment.length);
-          
-        
+          //console.log(data[0].comment.length);         
           });
-        })
-    
-
-        
+        }) 
         })
           document.getElementById("postBtn2").onclick = function(e) {
           e.preventDefault();
@@ -438,24 +471,12 @@ $(document).ready(function() {
                   })             
 
                 })
-                function do_totalsN(){
-                  var ele = document.getElementsByClassName('alert-success')[0];
-                  ele.style.display = 'block';
-                  setTimeout(function(){
-                      ele.style.display = 'none';
-                  }, 5000);
-              }
-              do_totalsN();
+                
+              display_success();
                 //socket.emit('post message', {username: username, message: message});
               } else {
-                function do_totalsN(){
-                  var ele = document.getElementsByClassName('alert-danger')[0];
-                  ele.style.display = 'block';
-                  setTimeout(function(){
-                      ele.style.display = 'none';
-                  }, 5000);
-              }
-              do_totalsN(); 
+                
+              display_danger(); 
                 // add your code here
               }
             });
@@ -496,10 +517,9 @@ $(document).ready(function() {
           $('body').on('click', '#postBtn3', function() {
             let id = $(this).attr('value');
             let data = {
-              value: $(id).text() ,
+              value: document.getElementsByClassName('form-control '+id)[0].value,
               id: document.getElementById('hiddenid').value,
             }
-            console.log(data)
             fetch('/post/cmt/'+ id, { 
               method: 'POST', // *GET, POST, PUT, DELETE, etc.
               headers: {
@@ -516,22 +536,34 @@ $(document).ready(function() {
             response.json().then(function(data) { 
 
               if (data.success == 'true') {
-                var cmt =  document.getElementById(id).value  
-                var username = document.getElementById('username').value
+                var cmt =  document.getElementsByClassName('form-control '+id)[0].value 
+                var username = document.getElementById('username').text
                 var user_id = document.getElementById('hiddenid').value
                 insertcmt(username, cmt, user_id,id)
-                alert('Cập nhật thành công')
+                display_success();
                 //socket.emit('post message', {username: username, message: message});
               } else {
-                alert('Cập nhật thất bại')
+                display_danger();
                 // add your code here
               }
             });
-          })
-              
-
+          })             
           })  
-
+          $('body').on('click', '.btn-primary-cmt', function() {
+            let id_post = $(this).attr('id_post');
+            let id_cmt = $(this).attr('id_cmt');
+            document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].style.display = 'block';
+            document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].value  =  $('span.'+id_cmt)[0].innerText
+            document.getElementById("edit_cmt_ok").style.display = 'inline'; 
+            document.getElementById("edit_cmt_cancle").style.display = 'inline';
+            document.getElementsByClassName("time-and-like")[0].style.display = 'none';
+            document.getElementsByClassName("cmt-details "+id_cmt)[0].style.height += 110+"px"
+            $('span.'+id_cmt)[0].style.display = 'none'
+              })
+          $('body').on('click', '.comment', function() {
+              let id = $(this).attr('value')
+             document.getElementsByClassName("fb-status-container fb-border fb-gray-bg "+id)[0].style.display = 'block'
+          })
 
         function doSomething() {
           var modalImg = document.getElementById("img01");
@@ -539,13 +571,14 @@ $(document).ready(function() {
           modal.style.display = "block";
           modalImg.src = this.img.currentSrc; 
         }
+      
+        
         
 
 });
 
+
 // When the user clicks on <span> (x), close the modal
-
-
 function closeModalimage(){
   var modal = document.getElementById("myModals");
   modal.style.display = "none";
@@ -636,6 +669,7 @@ function ImgUpload() {
     $(this).parent().parent().remove();
   });
 }
+
 function ImgUpload_edit() {
   var imgWrap = "";
   var imgArray = [];
@@ -750,6 +784,7 @@ function deletevideopost(){
   document.getElementById('customvideo').value= ''
   document.getElementById('video_here').src = '';
 }
+
 function deletevideoModalpost_edit(){
   if(document.getElementById('video_modal').src.includes('/videos/')){
     console.log(document.getElementById('video_modal').src)

@@ -2,19 +2,24 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var User = require('../models/Users');
 var express = require('express');
+const credentials = require('.//../credential');
+const { response } = require('../app');
 var router = express.Router();
 passport.use(new GoogleStrategy({
-    clientID: "501271838777-fq6t9cv4poc4n7rmq38807iqpv97rqqf.apps.googleusercontent.com",
-    clientSecret: "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",
-        callbackURL: "https://sinhvientdt.herokuapp.com/auth/google/callback"
-    // callbackURL: "http://localhost:3000/auth/google/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
+    clientID: credentials.clientID,
+    clientSecret: credentials.clientSecret,
+    // callbackURL: "https://sinhvientdt.herokuapp.com/auth/google/callback"
+    callbackURL: "http://localhost:3000/auth/google/callback"
+
+  },    
+
+  function(accessToken, refreshToken, profile, done) {   
+
     const authId = 'google:' + profile.id;
     if(profile.emails[0].value.indexOf("@student.tdtu.edu.vn")>0) {
     User.findOne({ 'authId': authId })
       .then(user => {
-        if(user) return done(null, user);
+        if(user) return done(null, user,accessToken,refreshToken);
         new User({
           authId: authId,
           name: profile.displayName,
@@ -40,7 +45,7 @@ passport.use(new GoogleStrategy({
           created: new Date(),
           picture: profile.picture,
           role: 'teacher',
-          password: "phong123456",
+          password: "123456",
           
         }).save()
         .then(user => done(null, user))

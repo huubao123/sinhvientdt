@@ -13,4 +13,6 @@ router.post('/updatepost/:id',postapi.updatepost)
 router.delete('/deletepost/:id',postapi.deletepost)
 router.post('/createpost',postapi.createpost)
 router.post('/deletevideo/:id',postapi.deletevideo)
+router.post('/cmt/:id',postapi.createcmt)
+router.get('/:id/cmt/:id_cmt',postapi.getcmt)
 module.exports = router;

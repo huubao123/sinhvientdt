@@ -4,7 +4,6 @@
       <li class = "phongban"><a href="/phongban">Thông báo</a></li>
         <li class = "info"><a href="/info/{{id}}" >Info</a></li>
         {{#ifCond  role "==" 'admin'}}<li class = "admin"><a href="/admin" >admin</a></li>{{/ifCond }}
-    
       <li class = "logout"><a href="/logout" >Logout</a></li>
     </ul>
   </div>
@@ -21,6 +20,7 @@
 <div class="container bootstrap snippets bootdey">
     <div class="row">
         <input type="hidden" id = "hiddenid" value="{{id}}">
+
         <div class="panel">
             <div class="cover-photo">
               <div class="fb-timeline-img">
@@ -42,7 +42,7 @@
         
         <div class="panel profile-info">
           <form class="form-horizontal" role = "form"  id = "formpost" enctype="multipart/form-data">
-              <textarea id ="content" class="form-control input-lg p-text-area" rows="2" placeholder="Whats in your mind today?" name="content"></textarea>
+              <textarea id ="content" class="form-control input-lg p-text-area " rows="2" placeholder="Whats in your mind today?" name="content"></textarea>
                             {{!-- thêm ảnh  --}}
                       <div class="upload__box fileupload" id="fileupload" >
                     <div class="upload__btn-box">
@@ -124,18 +124,19 @@
                   <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" id ='fb-user-thumb' class="fb-user-image">
               </div>
               <div class="fb-user-details" id = 'fb-user-details'>
-                    <div class='dropdown'>
+                    <div class='dropdown dropdown-post'>             
                    <button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'> </button>
                      <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-                    <button type='button' class='btn btn-primary'  data-toggle='modal' data-target='#myModal' >Edit</button>
-                  <button type='button' class='btn-primarydelete' >Delete</button>
-               </ul>
+                        <button type='button' class='btn btn-primary'  data-toggle='modal' data-target='#myModal' >Chỉnh sửa bài viết</button>
+                        <br>
+                        <button type='button' class='btn btn-primarydelete' >Xóa</button>
+                    </ul>
                 </div>
                   <h3><a href="#" class = "display-name">Margarita Elina</a></h3>
                   <p>7 minutes ago near Alaska, USA</p>
               </div>
               <div class="clearfix"></div>
-              <p class="fb-user-status"> </p>
+              <p class="fb-user-status textsize-thumb"> </p>
                     <div class="imageContainer" >
                             
                         </div>
@@ -149,26 +150,24 @@
                 Your browser does not support HTML5 video.
             </video>
             <iframe  src=""  id = 'videoyoutube'></iframe>
-
-              <div class="fb-status-container fb-border">
-                  <div class="fb-time-action">
-                      <a href="#" title="Like this">Like</a>
-                      <span>-</span>
-                      <a href="#" title="Leave a comment">Comments</a>
-                      <span>-</span>
-                      <a href="#" title="Send this to friend or post it on your time line">Share</a>
-                  </div>
-              </div>
-        
-        
-              <div class="fb-status-container fb-border fb-gray-bg">
-                  <div class="fb-time-action like-info">
+                <div class="fb-time-action like-info">
                       <a href="#">Jhon Due,</a>
                       <a href="#">Danieal Kalion</a>
                       <span>and</span>
                       <a href="#">40 more</a>
                       <span>like this</span>
                   </div>
+              <div class="fb-status-container fb-border">
+                  <div class="fb-time-action selection">        
+                    <button class = "like" id = "like"><i class="fa-solid fa-thumbs-up" id="liked" ></i><i class="fa-regular fa-thumbs-up"></i>Thích</button>
+                    <button class = "comment" id="comment" value="" ><i class="fa-regular fa-message"></i>Bình luận</button>
+                    <button class = "share" id  = "share"><i class="fa-solid fa-share"></i>Chia sẻ</button>
+                  </div>
+              </div>
+        
+        
+              <div class="fb-status-container fb-border fb-gray-bg">
+                  
         
                   <ul class="fb-comments" id="fb-comments">
                       <template id="cmt">
@@ -177,9 +176,21 @@
                               <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" >
                           </a>
                           <div class="cmt-details" id= "cmt-details">
-                              <a href="#" class = "usercmt">Jhone due</a>
-                              <span class="cmtcontent" value=""> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
-                              <p>40 minutes ago - <a href="#" class="like-link">Like</a></p>
+                              <a href="#" class = "usercmt ">Jhone due</a>
+                              <div class='dropdown dropdown-cmt'>             
+                                <button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'> </button>
+                                    <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
+                                        <button type='button' class='btn btn-primary-cmt' >Chỉnh sửa bình luận</button>
+                                        <br>
+                                        <button type='button' class='btn btn-primarydelete-cmt' >Xóa</button>
+                                    </ul>
+                                </div>
+                              <br>
+                              <span class="cmtcontent textsize-thumb" value=""> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
+                                <textarea class="cmtcontent_input textsize-thumb" value="" type='text' id = "text" onkeyup="this.style.height='24px'; this.style.height = this.scrollHeight + 12 + 'px';"></textarea>
+                              <p class="time-and-like">40 minutes ago - <a href="#" class="like-link">Like</a></p>
+                        <button type='button' class='btn' id="edit_cmt_ok">OK</button><button type='button' class='btn btn-danger-soft' id="edit_cmt_cancle">Hủy</button>
+
                           </div>
                       </li>
                       </template>
@@ -190,7 +201,7 @@
                               <img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="">
                           </a>
                           <div class="cmt-form">
-                              <textarea class="form-control" id = "contentcmt" placeholder="Write a comment..." name=""></textarea>
+                              <textarea class="form-control textsize-thumb" id = "contentcmt" placeholder="Write a comment..." name=""></textarea>
                              <br>
                               <footer class="cmt-footer">
                                   

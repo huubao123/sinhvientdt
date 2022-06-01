@@ -51,11 +51,13 @@
             e.preventDefault();            
         }
     });
+    var user = document.getElementById('email').value = "danglehuubaophc@gmail.com"
+    var pass = document.getElementById('password').value ="asd"
    document.getElementById("login").onclick = function(e) {
         e.preventDefault();
         let data = {    
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value,
+            email: user, //document.getElementById('email').value,
+            password: pass   //document.getElementById('password').value
         }
         fetch('/login', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.

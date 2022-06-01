@@ -1,9 +1,7 @@
 class Login {
-         logout(req, res){
-          
+         logout(req, res){          
                 req.logout();
-                res.redirect('/login');             
-              
+                res.redirect('/login');                           
          }
     
 }

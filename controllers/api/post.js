@@ -9,7 +9,7 @@ class Posts {
         let page = parseInt(req.params.page)
         let limit = parseInt(req.params.limit)
         let skip = (page-1)*limit
-        let posts =await Post.find().sort([['creat_at',  -1]]).skip(skip).limit(limit)
+        let posts =await Post.find().sort([['creat_at',  1]]).skip(skip).limit(limit)
         res.json(posts)
       }
       async getpostsid(req, res){
@@ -263,7 +263,6 @@ class Posts {
 
       }
       async deletevideo(req, res){
-        console.log(req.body.linkvideo)
         fs.unlinkSync('./public'+req.body.linkvideo)
         await Post.updateOne(
           {'_id': req.params.id },
@@ -277,6 +276,35 @@ class Posts {
         
         )
         res.json({success: 'true'})
+      }
+      async createcmt(req, res){
+        console.log(req.body)
+        await Post.updateOne(
+          {'_id': req.params.id },
+                { $push:
+                  {
+                    comment: {
+                      $each: [
+                        {
+                          user_id: req.body.id,
+                          content:  req.body.value,
+                          creat_at: new Date(),
+                          updated_at: new Date()
+                        }
+                      ]
+                    }
+                  }                  
+                 },
+                {upsert: true},
+        )
+        res.json({success: 'true'})
+      }
+      async getcmt(req, res){
+       let cmt = await Post.find({'_id': req.params.id},
+       { comment: { $elemMatch: { _id:req.params.id_cmt} } },
+       )
+        console.log(cmt)
+        res.json(cmt)
       }
 }
 
