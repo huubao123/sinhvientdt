@@ -278,7 +278,6 @@ class Posts {
         res.json({success: 'true'})
       }
       async createcmt(req, res){
-        console.log(req.body)
         await Post.updateOne(
           {'_id': req.params.id },
                 { $push:
@@ -303,9 +302,33 @@ class Posts {
        let cmt = await Post.find({'_id': req.params.id},
        { comment: { $elemMatch: { _id:req.params.id_cmt} } },
        )
-        console.log(cmt)
         res.json(cmt)
       }
+      async editcmt(req, res){
+        await Post.findOneAndUpdate({'_id': req.params.id, 'comment._id': req.params.id_cmt},
+        { $set: 
+          { 
+            'comment.$.content': req.body.content }   
+        },
+        {upsert: true},
+        )
+        res.json({success: 'true'})
+      }
+      async deletecmt(req, res){
+        await Post.updateOne(
+          {'_id': req.params.id },
+                { $pull:
+                  {
+                    comment: {
+                      _id: req.params.id_cmt
+                    }
+                  }                  
+                 },
+                {upsert: true},
+        )
+        res.json({success: 'true'})
+      }
+
 }
 
 module.exports = new Posts() 

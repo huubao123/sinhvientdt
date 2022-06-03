@@ -222,6 +222,15 @@ $(document).ready(function() {
     var content = clone.querySelector(".cmtcontent"); 
     content.innerHTML = message
     var drop_cmt = clone.querySelector('.dropdown-cmt')
+    var li = clone.querySelector("li")
+    li.classList.add(cmt_id)
+    li.setAttribute("cmt_id", cmt_id)
+    var ok = clone.querySelector("#edit_cmt_ok")
+    ok.setAttribute("id_cmt", cmt_id)
+    ok.setAttribute("id_post",_id)
+    var cancle =   clone.querySelector("#edit_cmt_cancle")
+    cancle.setAttribute("id_cmt", cmt_id)
+    cancle.setAttribute("id_post",_id)
     if(hiddenid != user_id) {
       drop_cmt.style.display ='none';
     }else{
@@ -427,7 +436,6 @@ $(document).ready(function() {
                   }
                   response.json().then(async post  => {
                   post_edit = document.getElementsByClassName(' panel-body '+id)[0] 
-                  console.log(post_edit.childNodes)
                   for (var i = 0; i < post_edit.childNodes.length; i++) {
                     if (post_edit.childNodes[i].id == 'videoyoutube'){
                       if(post[0].linkyoutube.length > 1){
@@ -554,6 +562,9 @@ $(document).ready(function() {
             let id_cmt = $(this).attr('id_cmt');
             document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].style.display = 'block';
             document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].value  =  $('span.'+id_cmt)[0].innerText
+            document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].setAttribute("id_cmt", id_cmt)
+            document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].setAttribute("id_post", id_post)
+
             document.getElementById("edit_cmt_ok").style.display = 'inline'; 
             document.getElementById("edit_cmt_cancle").style.display = 'inline';
             document.getElementsByClassName("time-and-like")[0].style.display = 'none';
@@ -565,22 +576,114 @@ $(document).ready(function() {
              document.getElementsByClassName("fb-status-container fb-border fb-gray-bg "+id)[0].style.display = 'block'
           })
          
-          if(document.getElementById('cmtcontent_input').style.display == 'block'){
-            var  text = document.getElementById("cmtcontent_input")
-            console.log(text)
-            if(text){
-              text.addEventListener("keyup", function(event) {
-              event.preventDefault();
-              this.style.height='24px'; 
-              this.style.height = this.scrollHeight + 12 + 'px';
-              if (e.keyCode == 13) {
-                document.getElementById("edit_cmt_ok").click();
+          $('body').on('keyup', '.cmtcontent_input', function(e) {
+            let id_post = $(this).attr('id_post');
+            let id_cmt = $(this).attr('id_cmt');
+            this.style.height='24px'; 
+           this.style.height = this.scrollHeight + 12 + 'px';
+           document.getElementsByClassName("li "+id_cmt)[0].style.height = 1100 + 'px';
+            document.getElementsByClassName("li "+id_cmt)[0].style.height = this.scrollHeight +  100 + 'px';
+            if (e.keyCode == 13) {
+              document.getElementById("edit_cmt_ok").click();
               }
-            })
-            }
-          }
+            else if (e.keyCode == 27) {
+              document.getElementById("edit_cmt_cancle").click();
+              }
+            })  
+          $('body').on('click', '#edit_cmt_cancle', function() {  
+            let id_post = $(this).attr('id_post');
+            let id_cmt = $(this).attr('id_cmt');
+            document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].style.display = 'none';
+              document.getElementById("edit_cmt_ok").style.display = 'none'; 
+              document.getElementById("edit_cmt_cancle").style.display = 'none';
+              document.getElementsByClassName("time-and-like")[0].style.display = 'block';
+              $('span.'+id_cmt)[0].style.display = 'block'
+          })
+          $('body').on('click', '.btn-primarydelete-cmt', function() {  
+            let id_post = $(this).attr('id_post');
+            let id_cmt = $(this).attr('id_cmt');
+            document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].style.display = 'none';
+              document.getElementById("edit_cmt_ok").style.display = 'none'; 
+              document.getElementById("edit_cmt_cancle").style.display = 'none';
+              document.getElementsByClassName("time-and-like")[0].style.display = 'block';
+              $('span.'+id_cmt)[0].style.display = 'block'              
+              try {
+                fetch('/post/'+id_post+'/deletecmt/'+id_cmt , { 
+                  method: 'delete', // *GET, POST, PUT, DELETE, etc.
+                  headers: {
+                    'Content-Type': 'application/json'  
+                  },
+                  // body data type must match "Content-Type" header
+                })
+                .then(response => {
+                  if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    return;
+                  }
+                  // Examine the text in the response
+                  response.json().then(async  function(data) { 
             
+                    if (data.success == 'true') {
+                      await $( "li."+id_cmt ).remove();
+                      display_success();
+                      
+                      //socket.emit('post message', {username: username, message: message});
+                    } else {
+                      display_danger();
+                      // add your code here
+                    }
+                })              
+              });
+            }
+              catch(err) {
+                console.log(err)
+              }
+          })
+          $('body').on('click', '#edit_cmt_ok', function() {  
+            let id_post = $(this).attr('id_post');
+            let id_cmt = $(this).attr('id_cmt');
+              let data = {
+                content:  document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].value
+              }
+              try {
+                fetch('/post/'+ id_post+'/editcmt/'+ id_cmt , { 
+                  method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                  headers: {
+                    'Content-Type': 'application/json'  
+                  },
+                  body: JSON.stringify(data) // body data type must match "Content-Type" header
+                })
+                .then(response => {
+                  if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' + response.status);
+                    return;
+                  }
+                  // Examine the text in the response
+                  response.json().then(function(data) { 
+            
+                    if (data.success == 'true') {
+                      display_success()
+                      document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].style.display = 'none';
+                      document.getElementById("edit_cmt_ok").style.display = 'none'; 
+                      document.getElementById("edit_cmt_cancle").style.display = 'none';
+                      document.getElementsByClassName("time-and-like")[0].style.display = 'block';
+                      $('span.'+id_cmt)[0].style.display = 'block'
 
+                      $('span.'+id_cmt)[0].innerText = document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].value
+
+                      //socket.emit('post message', {username: username, message: message});
+                    } else {
+                      display_danger();
+                      // add your code here
+                    }
+                })              
+              });
+            }
+              catch(err) {
+                console.log(err)
+              }
+          })
+           
         function doSomething() {
           var modalImg = document.getElementById("img01");
         var modal = document.getElementById("myModals");
@@ -852,17 +955,6 @@ function deletevideoModalpost_edit(){
 }
 
 
-    var  text = document.getElementById("cmtcontent_input")
       
     
 
-document.addEventListener('DOMContentLoaded', function () {
-  text.addEventListener("keyup", function(event) {
-      event.preventDefault();
-      this.style.height='24px'; 
-      this.style.height = this.scrollHeight + 12 + 'px';
-      if (e.keyCode == 13) {
-        document.getElementById("edit_cmt_ok").click();
-      }
-    })
-});

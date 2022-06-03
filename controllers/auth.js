@@ -19,7 +19,7 @@ passport.use(new GoogleStrategy({
     if(profile.emails[0].value.indexOf("@student.tdtu.edu.vn")>0) {
     User.findOne({ 'authId': authId })
       .then(user => {
-        if(user) return done(null, user,accessToken,refreshToken);
+        if(user) return done(null, user);
         new User({
           authId: authId,
           name: profile.displayName,
