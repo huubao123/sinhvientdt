@@ -42,7 +42,7 @@
         
         <div class="panel profile-info">
           <form class="form-horizontal" role = "form"  id = "formpost" enctype="multipart/form-data">
-              <textarea id ="content" class="form-control input-lg p-text-area " rows="2" placeholder="Whats in your mind today?" name="content"></textarea>
+              <textarea id ="content" class="form-control input-lg p-text-area textsize-thumb" rows="2" placeholder="Whats in your mind today?" name="content"></textarea>
                             {{!-- thêm ảnh  --}}
                       <div class="upload__box fileupload" id="fileupload" >
                     <div class="upload__btn-box">
@@ -187,7 +187,7 @@
                                 </div>
                               <br>
                               <span class="cmtcontent textsize-thumb" value=""> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
-                                <textarea class="cmtcontent_input textsize-thumb" value="" type='text' id = "text" onkeyup="this.style.height='24px'; this.style.height = this.scrollHeight + 12 + 'px';"></textarea>
+                                <textarea class="cmtcontent_input textsize-thumb " value="" type='text' id = "cmtcontent_input" ></textarea>
                               <p class="time-and-like">40 minutes ago - <a href="#" class="like-link">Like</a></p>
                         <button type='button' class='btn' id="edit_cmt_ok">OK</button><button type='button' class='btn btn-danger-soft' id="edit_cmt_cancle">Hủy</button>
 
@@ -201,7 +201,7 @@
                               <img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="">
                           </a>
                           <div class="cmt-form">
-                              <textarea class="form-control textsize-thumb" id = "contentcmt" placeholder="Write a comment..." name=""></textarea>
+                              <textarea class="form-control textsize-thumb" id = "contentcmt" placeholder="Write a comment..." name="" onkeyup="color:#000"></textarea>
                              <br>
                               <footer class="cmt-footer">
                                   
@@ -226,14 +226,14 @@
                 
                     <!-- Modal Header -->   
                     <div class="modal-header">
-                    <h4 class="modal-title" id="txtTitle">Modal Heading</h4>    
-                    <button type="button" class="closemodal" id="closemodal"  data-dismiss="modal" onclick="closeModal()">&times;</button>
+                    <h4 class="modal-title textsize-thumb" id="txtTitle">Modal Heading</h4>    
+                    <button type="button" class="closemodal " id="closemodal"  data-dismiss="modal" onclick="closeModal()">&times;</button>
                     </div>
                     
                     <!-- Modal body -->
                     <div class="modal-body">
                         <form>
-                        <textarea name= "content2" class="form-control input-lg p-text-area" id="txtBody" rows="2" >asds</textarea>
+                        <textarea name= "content2" class="form-control input-lg p-text-area text textsize-thumb" id="txtBody" rows="2" >asds</textarea>
                         {{!-- thêm ảnh --}}
                         <div class="upload__box_edit fileuploadedit" id="fileuploadedit" >
                     <div class="upload__btn-box">
@@ -255,7 +255,7 @@
 								<h4 class="mb-4 mt-0">Your Post video</h4>
 								<div class="text-center">
 									<!-- Image upload -->
-                                      <input type ='text' id = 'linkyoutube-modal' name = 'linkyoutube' Value = '' placeholder = 'Link Youtube '>
+                                      <input type ='text'  id = 'linkyoutube-modal' name = 'linkyoutube' Value = '' placeholder = 'Link Youtube '>
 
 									<!-- Button -->
                                       <video width="400" controls id = 'video_modal'>

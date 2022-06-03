@@ -564,6 +564,22 @@ $(document).ready(function() {
               let id = $(this).attr('value')
              document.getElementsByClassName("fb-status-container fb-border fb-gray-bg "+id)[0].style.display = 'block'
           })
+         
+          if(document.getElementById('cmtcontent_input').style.display == 'block'){
+            var  text = document.getElementById("cmtcontent_input")
+            console.log(text)
+            if(text){
+              text.addEventListener("keyup", function(event) {
+              event.preventDefault();
+              this.style.height='24px'; 
+              this.style.height = this.scrollHeight + 12 + 'px';
+              if (e.keyCode == 13) {
+                document.getElementById("edit_cmt_ok").click();
+              }
+            })
+            }
+          }
+            
 
         function doSomething() {
           var modalImg = document.getElementById("img01");
@@ -832,8 +848,21 @@ function deletevideoModalpost_edit(){
   }else{
       document.getElementById('video_upload_edit').value= ''
   document.getElementById('video_modal').src = '';
-  }
-      
-
-
+  }   
 }
+
+
+    var  text = document.getElementById("cmtcontent_input")
+      
+    
+
+document.addEventListener('DOMContentLoaded', function () {
+  text.addEventListener("keyup", function(event) {
+      event.preventDefault();
+      this.style.height='24px'; 
+      this.style.height = this.scrollHeight + 12 + 'px';
+      if (e.keyCode == 13) {
+        document.getElementById("edit_cmt_ok").click();
+      }
+    })
+});

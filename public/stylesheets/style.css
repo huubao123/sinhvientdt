@@ -333,6 +333,7 @@ a:hover{
   border-radius: 0px;
 }
 .fb-status-container.fb-border.fb-gray-bg {
+  display: none;
   margin: 10px;
     border-top: 0px;
   border-bottom: 0px;
@@ -373,13 +374,14 @@ background-color: #f0f2f5;
   float: left;
   margin-right: 15px;
 }
-.textsize-thumb{
+.textsize-thumb,.textsize-thumb:focus{
   font-size: medium;
   font-weight:normal;
   color: #000;
   line-height: 20px;
   margin-top: 10px;
 }
+
 .fb-comments .cmt-thumb img {
   
   width: 50px;
@@ -771,6 +773,7 @@ button.comment:hover {
   cursor: pointer;
 }
 textarea.cmtcontent_input{
+  background-color: white;
   display: none;
   width: 90%;
 }
