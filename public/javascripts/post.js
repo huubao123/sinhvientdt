@@ -6,17 +6,19 @@ $(document).ready(function() {
 
   var page =1;
   const limit = 5;
-   function display_success(){
+   function display_success(flash){
     var ele = document.getElementsByClassName('alert-success')[0];
     ele.style.display = 'block';
+    ele.childNodes[4].textContent = flash
     setTimeout(function(){
         ele.style.display = 'none';
     }, 5000);
   }
 
-  function display_danger(){
+  function display_danger(flash){
     var ele = document.getElementsByClassName('alert-danger')[0];
     ele.style.display = 'block';
+    ele.childNodes[4].textContent = flash
     setTimeout(function(){
         ele.style.display = 'none';
     }, 5000);
@@ -299,17 +301,22 @@ $(document).ready(function() {
         // Examine the text in the response
         response.json().then(function(data) { 
           if (data.success == 'true') {
+            
             let username = document.getElementById('username').innerHTML;
             let message = document.getElementById('content').value;
             let user_id= document.getElementById('hiddenid').value
             insertpost(username, message, user_id,data.linkyoutube,data.linkvideo,data.img,data.postid)
             
             document.getElementById('content').value = ''
+            let flash = "Post success"
+            display_success(flash)
             if(data.role == "phongban"){
              socket.emit('post post', { name: username});
 
             }
           } else {
+            let flash = "Post fail"
+            display_danger(flash)
             // add your code here
           }
         });
@@ -479,12 +486,13 @@ $(document).ready(function() {
                   })             
 
                 })
-                
-              display_success();
+                let flash = "Update Post success"
+              display_success(flash);
                 //socket.emit('post message', {username: username, message: message});
               } else {
-                
-              display_danger(); 
+                let  flash = "Update Failed";
+              display_danger(flash); 
+
                 // add your code here
               }
             });
@@ -548,10 +556,15 @@ $(document).ready(function() {
                 var username = document.getElementById('username').text
                 var user_id = document.getElementById('hiddenid').value
                 insertcmt(username, cmt, user_id,id)
-                display_success();
+                let flash = "Comment success"
+                display_success(flash);
+                console.log(data.comment)
+                document.getElementsByClassName('btn-primary-cmt')[0].setAttribute("id_cmt", data.comment._id)
+                document.getElementsByClassName('cmtcontent_input').classList = data.comment._id
                 //socket.emit('post message', {username: username, message: message});
               } else {
-                display_danger();
+                let  flash = "Create Comment failed";
+                display_danger(flash);
                 // add your code here
               }
             });
@@ -559,6 +572,7 @@ $(document).ready(function() {
           })  
           $('body').on('click', '.btn-primary-cmt', function() {
             let id_post = $(this).attr('id_post');
+            
             let id_cmt = $(this).attr('id_cmt');
             document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].style.display = 'block';
             document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].value  =  $('span.'+id_cmt)[0].innerText
@@ -625,11 +639,13 @@ $(document).ready(function() {
             
                     if (data.success == 'true') {
                       await $( "li."+id_cmt ).remove();
-                      display_success();
+                      let flash = "Delete comment success"
+                      display_success(flash);
                       
                       //socket.emit('post message', {username: username, message: message});
                     } else {
-                      display_danger();
+                      let flash = "Delete Comment failed";
+                      display_danger(flash);
                       // add your code here
                     }
                 })              
@@ -662,7 +678,8 @@ $(document).ready(function() {
                   response.json().then(function(data) { 
             
                     if (data.success == 'true') {
-                      display_success()
+                      let flash = "Edit comment success"
+                      display_success(flash)
                       document.getElementsByClassName("cmtcontent_input "+id_cmt)[0].style.display = 'none';
                       document.getElementById("edit_cmt_ok").style.display = 'none'; 
                       document.getElementById("edit_cmt_cancle").style.display = 'none';
@@ -673,7 +690,8 @@ $(document).ready(function() {
 
                       //socket.emit('post message', {username: username, message: message});
                     } else {
-                      display_danger();
+                      let flash = "Edit Comment failed";
+                      display_danger(flash);
                       // add your code here
                     }
                 })              

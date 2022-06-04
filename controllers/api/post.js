@@ -9,7 +9,7 @@ class Posts {
         let page = parseInt(req.params.page)
         let limit = parseInt(req.params.limit)
         let skip = (page-1)*limit
-        let posts =await Post.find().sort([['creat_at',  1]]).skip(skip).limit(limit)
+        let posts =await Post.find().sort([['creat_at',  -1]]).skip(skip).limit(limit)
         res.json(posts)
       }
       async getpostsid(req, res){
@@ -278,7 +278,7 @@ class Posts {
         res.json({success: 'true'})
       }
       async createcmt(req, res){
-        await Post.updateOne(
+         await Post.updateOne(
           {'_id': req.params.id },
                 { $push:
                   {
@@ -295,8 +295,19 @@ class Posts {
                   }                  
                  },
                 {upsert: true},
+        ) 
+        Post.findOne({_id: req.params.id},function(err, post){
+          if (err) {
+            console.log(err)
+          }
+          for (let i = post.comment.length -1; i>0;i--){
+            if (post.comment[i].user_id == req.body.id){
+              res.json({success: 'true', comment: post.comment[i]})
+              i= 0
+            }
+          }
+        }
         )
-        res.json({success: 'true'})
       }
       async getcmt(req, res){
        let cmt = await Post.find({'_id': req.params.id},

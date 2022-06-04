@@ -8,8 +8,8 @@ var router = express.Router();
 passport.use(new GoogleStrategy({
     clientID: credentials.clientID,
     clientSecret: credentials.clientSecret,
-    callbackURL: "https://sinhvientdt.herokuapp.com/auth/google/callback"
-    // callbackURL: "http://localhost:3000/auth/google/callback"
+    // callbackURL: "https://sinhvientdt.herokuapp.com/auth/google/callback"
+    callbackURL: "http://localhost:3000/auth/google/callback"
 
   },    
 
