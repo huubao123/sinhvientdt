@@ -36,7 +36,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   resave: false,
   saveUninitialized: true,  
-  secret: 'SECRET'
+  secret: 'SECRET',
+  maxAge: 24 * 60 * 60 * 1000,
 }));
 
 app.use(passport.initialize());

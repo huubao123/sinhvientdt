@@ -37,14 +37,14 @@ $(document).ready(function() {
         .then(response => {
           if (response.status !== 200) {
             console.log('Looks like there was a problem. Status Code: ' + response.status);
-            return;
+            return; 
           }
           response.json().then(datas => { 
           var temp = document.querySelector("#post");
           var clone = temp.content.cloneNode(true);
           var name = clone.querySelector(".display-name");
           name.href = "/post/user/" + data[i].user_id
-          name.innerHTML = datas.name;
+          name.innerHTML = datas[0].name;
 
           var btn = clone.querySelector(".btn-primary");
           var userid = clone.querySelector(".panel-body");
@@ -76,7 +76,7 @@ $(document).ready(function() {
           }
             
           var image = clone.querySelector('.fb-user-image');
-          image.src = datas.picture
+          image.src = datas[0].picture
           var imageid =clone.querySelector('.imageContainer')
           
 

@@ -12,12 +12,13 @@ passport.use(new GoogleStrategy({
     // callbackURL: "http://localhost:3000/auth/google/callback"
 
   },    
-
-  function(accessToken, refreshToken, profile, done) {   
+  
+  
+  function(accessToken, refreshToken, profile, done) { 
 
     const authId = 'google:' + profile.id;
     if(profile.emails[0].value.indexOf("@student.tdtu.edu.vn")>0) {
-    User.findOne({ 'authId': authId })
+   User.findOne({ 'authId': authId })
       .then(user => {
         if(user) return done(null, user);
         new User({
@@ -28,7 +29,7 @@ passport.use(new GoogleStrategy({
           picture: profile.photos[0].value,
           role: 'student',
         }).save()
-        .then(user => done(null, user))
+        .then(user => done(null, user,accessToken,refreshToken))
         .catch(err => done(err, null));
       })
       .catch(err => {
@@ -37,7 +38,7 @@ passport.use(new GoogleStrategy({
     }else if(profile.emails[0].value.indexOf("@tdtu.edu.vn")>0){
       User.findOne({ 'authId': authId })
       .then(user => {
-        if(user) return done(null, user);        
+        if(user) return done(null, user,);        
         new User({
           authId: authId,
           name: profile.displayName,

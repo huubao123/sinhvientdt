@@ -29,7 +29,7 @@ window.onload = function(){
               imghref.href = "post/user/"+ data[i].id
 
               var img = clone.querySelector("#avartar");
-              img.src = datas.picture
+              img.src = datas[0].picture
                         document.getElementById('list').appendChild(clone); 
 
             })

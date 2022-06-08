@@ -19,29 +19,30 @@ $(document).ready(function() {
         ele.style.display = 'none';
     }, 5000);
   }
-  function Loaduser() {      
-    fetch('/user/'+id) 
+ async function Loaduser() {      
+   await fetch('/user/'+id) 
     .then(response => {
       if (response.status !== 200) {  
         console.log('Looks like there was a problem. Status Code: ' + response.status);
         return;
       }
       response.json().then(data => {
+        console.log('data', data);
         // console.log(data[0].user_id) 
       //console.log(data[0].comment.length);
          var name = document.getElementById("username")
-         name.innerHTML = data.name
-         name.href ="/post/user/" + data._id 
+         name.innerHTML = data[0].name
+         name.href ="/post/user/" + data[0]._id 
          var pic = document.getElementById("profile_img_src") 
-         pic.src =data.picture
-        document.title  = data.name
+         pic.src =data[0].picture
+        document.title  = data[0].name
 
 
 
       });
     })
   }
-  Loaduser()
+   Loaduser();
   function insertpost(username, message, id,linkyoutube,linkvideo,img,postid){
     var temp = document.querySelector("#post");
     var clone = temp.content.cloneNode(true);
@@ -175,10 +176,10 @@ $(document).ready(function() {
       
       var del = clone.querySelector(".btn-primarydelete");
       var cmt = clone.querySelector("#postBtn3");
-        var img = clone.querySelector('#fb-user-thumb')
-        img.src = document.getElementById('profile_img_src').src
-        var userid = clone.querySelector(".panel-body");
-              userid.classList.add(data[i]._id)
+      var img = clone.querySelector('#fb-user-thumb')
+      img.src = document.getElementById('profile_img_src').src
+      var userid = clone.querySelector(".panel-body");
+      userid.classList.add(data[i]._id)
       name.innerHTML = document.getElementById('username').innerHTML;
       name.href = "/post/user/" + id  
       btn.value = data[i]._id
@@ -310,8 +311,6 @@ $(document).ready(function() {
       cancle.setAttribute("id_post",_id)
       if(id != user_id) {
         drop_cmt.style.display ='none';
-        console.log("hiddenid",hiddenid)
-        console.log("user_id",user_id)
       }else{
         drop_cmt.style.display ='block';
         cmt_edit = clone.querySelector(".btn-primary-cmt")
@@ -353,7 +352,7 @@ $(document).ready(function() {
             response.json().then(function(datas) { 
               document.getElementById('myModal').style.display = 'block';
               var name = document.querySelector("#txtTitle");
-              name.innerHTML = datas.name
+              name.innerHTML = datas[0].name
               var content = document.querySelector("#txtBody");
               content.innerHTML = data[0].content
               if(data[0].linkyoutube){

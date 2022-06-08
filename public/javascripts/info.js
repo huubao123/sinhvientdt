@@ -10,42 +10,36 @@ window.onload = function(){
             return;
           }
           response.json().then(data => {
-            document.getElementById('first_name').value = data.name
-            if (data.phone_number){
-                document.getElementById('phone_number').value = data.phone_number
+            document.getElementById('first_name').value = data[0].name
+            if (data[0].phone_number){
+                document.getElementById('phone_number').value = data[0].phone_number
             }else{
                 document.getElementById('phone_number').value = ""
             }
-            if (data.facebook){
-                document.getElementById('facebook').value = data.linkfacebook
+            if (data[0].facebook){
+                document.getElementById('facebook').value = data[0].linkfacebook
             }else{
                 document.getElementById('facebook').value = ""
             }
-            if (data.lop){
-                document.getElementById('lop').value = data.lop
+            if (data[0].lop){
+                document.getElementById('lop').value = data[0].lop
             } 
-            if (data.khoa){
-                document.getElementById('khoa').value = data.khoa
+            if (data[0].khoa){
+                document.getElementById('khoa').value = data[0].khoa
             }
-
-            if (data.picture){
-              if (data.picture.includes('/images/')){
-                document.getElementById('image').src ="../" + data.picture
+            if (data[0].picture){              
+              if (data[0].picture.includes('/images/')){
+                document.getElementById('image').src ="../" + data[0].picture
               } else{
-                document.getElementById('image').src = data.picture
-              }
-              
-
+                document.getElementById('image').src = data[0].picture
+              }             
             }else{
               document.getElementById('image').src = ""
-            }
-            
+            }            
           });
         })
       }
-      LoadData()
-
-      
+      LoadData()      
       document.getElementById("update").addEventListener("click" , function(e){
         e.preventDefault();
         const fileInput = document.querySelector('#customFile') ;

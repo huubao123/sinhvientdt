@@ -5,11 +5,17 @@ const bcrypt = require('bcrypt');
   
 class Users {
     async getuser(req, res){
-        let user = await User.findOne({_id: req.params.id})
+        var user = await User.find({_id: req.params.id}).lean();
+        user.forEach((user) => {
+          delete user.password //  delete the password
+        })        
           res.json(user)
+        
+          
+            
       }
     async update(req, res){
-      var id = req.params.id
+      var id = req.params.id  
 
        const data = []
 
