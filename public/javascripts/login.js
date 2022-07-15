@@ -76,6 +76,7 @@
             // Examine the text in the response
             res.json().then(function(data) { 
             if (data.success == 'true') {
+                console.log(data)
             } else 
             {
                 // add your code here

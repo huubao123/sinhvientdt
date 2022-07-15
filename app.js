@@ -52,6 +52,14 @@ function isAdmin(req, res, next) {
       return next();
   res.redirect('/login');      
 }
+app.use((req, res, next) => {
+  res.append('Access-Control-Allow-Origin', ['*']);
+  res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.append('Access-Control-Allow-Headers', 'Content-Type');
+  res.append('Access-Control-Expose-Headers', 'field')
+  next();
+});
+
 app.use('/',indexRouter);
 app.use('/post',isLoggedIn,postRouter);
 app.use('/user',isLoggedIn, usersRouter); 

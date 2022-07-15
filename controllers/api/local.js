@@ -5,7 +5,7 @@ var passportLocal = require('passport-local')
 var credentials = require('../../credential')
 // const randToken = require('rand-token');
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 let LocalStrategy = passportLocal.Strategy;
 let initPassportLocal = () => {
   passport.use('local',new LocalStrategy({
@@ -14,7 +14,7 @@ let initPassportLocal = () => {
     passReqToCallback: true
   }, async (req, email, password, done)=> {
     try {
-      let user = await User.findOne({'email':email});
+      var user = await User.findOne({'email': email}).lean();
       if (!user) {
         return done(null, false);
       }
@@ -22,7 +22,7 @@ let initPassportLocal = () => {
         if(user.password == password){
           return done(null, user);
         }
-        else{
+        else{ 
           return done(null, false);
         }
       }
@@ -32,8 +32,13 @@ let initPassportLocal = () => {
       if (!checkPassword) {
         return done(null, false);
       }
-
+      else{
+        
       return done(null, user);
+      }
+      
+    
+
     } catch (error) {
       
       console.log(error);

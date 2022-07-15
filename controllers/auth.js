@@ -5,22 +5,41 @@ var express = require('express');
 const credentials = require('.//../credential');
 const { response } = require('../app');
 var router = express.Router();
+var util = require('util');
+const jwt = require('jsonwebtoken');
+const { nextTick } = require('process');
+const generateJwtToken = (user) => {
+  const token = jwt.sign(user.toJSON(), credentials.JWT_SECRET, {
+    expiresIn: '1d',
+  });
+  return token;
+};
+
 passport.use(new GoogleStrategy({
+  authorizationURL: 'https://accounts.google.com/o/oauth2/auth',
+  tokenURL: 'https://accounts.google.com/o/oauth2/token',
+
     clientID: credentials.clientID,
     clientSecret: credentials.clientSecret,
-    callbackURL: "https://sinhvientdt.herokuapp.com/auth/google/callback"
-    // callbackURL: "http://localhost:3000/auth/google/callback"
+    // callbackURL: "https://sinhvientdt.herokuapp.com/auth/google/callback"
+    callbackURL: "http://localhost:3000/auth/google/callback"
 
   },    
-  
+
   
   function(accessToken, refreshToken, profile, done) { 
+    process.nextTick(function() {
+      console.log("Token is ");
+      console.log(util.inspect(accessToken, false, null));
+      console.log("Refresh is ");
+      console.log(util.inspect(refreshToken, false, null));
+  });
 
     const authId = 'google:' + profile.id;
     if(profile.emails[0].value.indexOf("@student.tdtu.edu.vn")>0) {
    User.findOne({ 'authId': authId })
       .then(user => {
-        if(user) return done(null, user);
+        if(user) return done(null,user);
         new User({
           authId: authId,
           name: profile.displayName,
@@ -29,7 +48,7 @@ passport.use(new GoogleStrategy({
           picture: profile.photos[0].value,
           role: 'student',
         }).save()
-        .then(user => done(null, user,accessToken,refreshToken))
+        .then(user => done(null, user),)
         .catch(err => done(err, null));
       })
       .catch(err => {
@@ -38,7 +57,7 @@ passport.use(new GoogleStrategy({
     }else if(profile.emails[0].value.indexOf("@tdtu.edu.vn")>0){
       User.findOne({ 'authId': authId })
       .then(user => {
-        if(user) return done(null, user,);        
+        if(user) return done(null, user);        
         new User({
           authId: authId,
           name: profile.displayName,
@@ -87,8 +106,15 @@ router.get('/google',
 // authentication has failed.
 router.get('/google/callback',
   passport.authenticate('google',
-  { successRedirect: '/',
-    failureRedirect: '/login' }));
+  {failureRedirect: '/login' }),
+  (req, res) => {    
+    const token = generateJwtToken(req.user);
+    res.cookie('jwt', token);
+    res.header('field', token)
+
+    res.redirect('/');
+
+  });
 
 module.exports = router;
   
